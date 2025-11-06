@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diseño de Interiores - Void Studio 3D</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:sans-serif; }
+
+  body { background:#fff; }
+
+  /* Franja superior */
+  #menu-bar {
+    position:fixed;
+    top:0;
+    left:0;
+    height:60px;
+    width:100%;
+    background-color:#000;
+    display:flex;
+    align-items:center;
+    padding-left:250px;
+    z-index:5;
+  }
+
+  #menu-bar a {
+    color:#fff;
+    text-decoration:none;
+    margin-right:30px;
+    font-size:1rem;
+    transition: color 0.3s ease;
+  }
+
+  #menu-bar a:hover { color:#aaa; }
+
+  /* Logo fijo que vuelve al inicio */
+  #logo {
+    position:fixed;
+    top:15px;
+    left:30px;
+    font-size:1.5rem;
+    font-weight:bold;
+    color:#fff;
+    cursor:pointer;
+    z-index:10;
+    text-decoration:none;
+  }
+
+  /* Secciones */
+  .section {
+    width:80%;
+    max-width:1100px;
+    margin:120px auto;
+    opacity:0;
+    transform:translateY(60px);
+    transition: all 0.8s ease;
+  }
+
+  .section.visible {
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  .section h2 { font-size:2rem; margin-bottom:20px; }
+
+  /* Proyectos */
+  .project {
+    display:flex;
+    align-items:center;
+    background-color:#f4f4f4;
+    border-radius:10px;
+    padding:20px;
+    margin-bottom:20px;
+    gap:20px;
+    cursor:pointer;
+    overflow:hidden;
+    position:relative;
+  }
+
+  .project img {
+    width:180px;
+    height:120px;
+    object-fit:cover;
+    border-radius:10px;
+    transition: transform 0.3s ease;
+  }
+
+  .project:hover img { transform: scale(1.05); }
+
+  .project-info { flex:1; }
+  .project-info h3 { margin-bottom:10px; }
+  .project-info p { color:#555; }
+
+  /* Contacto */
+  #contacto {
+    text-align:center;
+    background-color:#000;
+    color:#fff;
+    padding:80px 20px;
+    border-radius:20px;
+  }
+
+  #contacto h2 { font-size:2rem; margin-bottom:20px; }
+  #contacto p { margin:10px 0; font-size:1rem; }
+  #contacto a { color:#fff; text-decoration:none; font-weight:bold; }
+  #contacto a:hover { text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<!-- Logo fijo que vuelve al inicio -->
+<a id="logo" href="index.html">Void Studio 3D</a>
+
+<!-- Menú -->
+<div id="menu-bar">
+  <a href="interiores.html">Diseño de interiores</a>
+  <a href="stands.html">Diseño de stands</a>
+  <a href="comerciales.html">Espacios comerciales</a>
+  <a href="eventos.html">Eventos y activaciones</a>
+  <a href="mobiliario.html">Diseño mobiliario</a>
+  <a href="automotriz.html">Diseño automotriz</a>
+</div>
+
+<!-- Contenido principal -->
+<div id="main-content">
+
+  <!-- Sección Proyectos -->
+  <section class="section" id="proyectos">
+    <h2>Proyectos de Diseño de Interiores</h2>
+
+    <div class="project" data-images="https://picsum.photos/200/150?1,https://picsum.photos/200/150?11,https://picsum.photos/200/150?111">
+      <img src="https://picsum.photos/200/150?1" alt="Proyecto 1">
+      <div class="project-info">
+        <h3>Departamento Moderno</h3>
+        <p>Espacio funcional con muebles a medida y tonos cálidos.</p>
+      </div>
+    </div>
+
+    <div class="project" data-images="https://picsum.photos/200/150?2,https://picsum.photos/200/150?22,https://picsum.photos/200/150?222">
+      <img src="https://picsum.photos/200/150?2" alt="Proyecto 2">
+      <div class="project-info">
+        <h3>Casa Contemporánea</h3>
+        <p>Diseño minimalista con materiales naturales y mucha luminosidad.</p>
+      </div>
+    </div>
+
+    <div class="project" data-images="https://picsum.photos/200/150?3,https://picsum.photos/200/150?33,https://picsum.photos/200/150?333">
+      <img src="https://picsum.photos/200/150?3" alt="Proyecto 3">
+      <div class="project-info">
+        <h3>Oficina Corporativa</h3>
+        <p>Diseño elegante y moderno optimizando el espacio de trabajo.</p>
+      </div>
+    </div>
+
+    <div class="project" data-images="https://picsum.photos/200/150?4,https://picsum.photos/200/150?44,https://picsum.photos/200/150?444">
+      <img src="https://picsum.photos/200/150?4" alt="Proyecto 4">
+      <div class="project-info">
+        <h3>Living Minimalista</h3>
+        <p>Ambiente cálido y funcional con mobiliario contemporáneo.</p>
+      </div>
+    </div>
+
+    <div class="project" data-images="https://picsum.photos/200/150?5,https://picsum.photos/200/150?55,https://picsum.photos/200/150?555">
+      <img src="https://picsum.photos/200/150?5" alt="Proyecto 5">
+      <div class="project-info">
+        <h3>Departamento Loft</h3>
+        <p>Espacio abierto con diseño moderno y materiales industriales.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Contacto -->
+  <section class="section" id="contacto">
+    <h2>Información de contacto</h2>
+    <p>Email: <a href="mailto:voidstudio3d@gmail.com">voidstudio3d@gmail.com</a></p>
+    <p>Teléfono: <a href="tel:+59170000000">+591 700 00000</a></p>
+    <p>Instagram: <a href="https://instagram.com/voidstudio3d" target="_blank">@voidstudio3d</a></p>
+    <p>Ubicación: Cochabamba, Bolivia</p>
+  </section>
+</div>
+
+<script>
+  // Animación al hacer scroll
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold:0.2 });
+  sections.forEach(sec => observer.observe(sec));
+
+  // Efecto mini carrusel en proyectos
+  const projects = document.querySelectorAll('.project');
+  projects.forEach(p=>{
+    const imgs = p.dataset.images.split(',');
+    let imgIndex = 0;
+    let interval;
+
+    const imgEl = p.querySelector('img');
+
+    p.addEventListener('mouseenter', ()=>{
+      interval = setInterval(()=>{
+        imgIndex = (imgIndex + 1) % imgs.length;
+        imgEl.src = imgs[imgIndex];
+      },1500);
+    });
+
+    p.addEventListener('mouseleave', ()=>{
+      clearInterval(interval);
+      imgEl.src = imgs[0];
+      imgIndex = 0;
+    });
+  });
+</script>
+
+</body>
+</html>
