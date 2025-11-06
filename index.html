@@ -3,99 +3,143 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diseño de Interiores - Void Studio 3D</title>
+<title>Feria - Void Studio 3D</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:sans-serif; }
+  body { background-color:#111; overflow:hidden; transition: background-color 0.6s linear; }
 
-  body { background:#fff; }
+  /* Logo inicial */
+  #intro-text {
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    font-size:5rem;
+    font-weight:bold;
+    color:#fff;
+    cursor:pointer;
+    transition: all 1.8s ease, color 0.8s ease;
+    z-index:10;
+  }
 
   /* Franja superior */
   #menu-bar {
     position:fixed;
-    top:0;
-    left:0;
+    top:0; left:0;
     height:60px;
     width:100%;
     background-color:#000;
     display:flex;
     align-items:center;
-    padding-left:300px; /* más espacio a la derecha del logo */
+    padding-left:250px;
+    justify-content:space-between;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity 1s ease;
     z-index:5;
   }
 
-  #menu-bar a {
+  /* Pestañas */
+  .nav-tab {
     color:#fff;
     text-decoration:none;
     margin-right:30px;
     font-size:1rem;
-    transition: color 0.3s ease;
+    opacity:0;
+    transition: opacity 0.5s ease, transform 0.3s ease;
+    padding:5px 10px;
+    border-radius:5px;
+    display:inline-block;
   }
+  .nav-tab:hover { transform: scale(1.3); z-index:10; }
 
-  #menu-bar a:hover { color:#aaa; }
+  /* Menú social */
+  #social-menu { position:relative; margin-right:20px; }
+  #social-menu button {
+    background:none; border:none; cursor:pointer;
+    display:flex; flex-direction:column;
+    justify-content:space-between; width:25px; height:18px;
+  }
+  #social-menu button span {
+    display:block; height:3px; width:100%; background:#fff; border-radius:2px;
+  }
+  #social-menu .dropdown {
+    display:none; position:absolute; top:25px; right:0;
+    background-color:#111; border-radius:5px;
+    overflow:hidden; flex-direction:column; min-width:150px; z-index:10;
+  }
+  #social-menu .dropdown a {
+    color:#fff; padding:10px; text-decoration:none;
+    display:flex; align-items:center; gap:10px;
+  }
+  #social-menu .dropdown a img {
+    width:20px; height:20px; filter: grayscale(100%);
+    transition: filter 0.3s ease;
+  }
+  #social-menu .dropdown a:hover img { filter: grayscale(0%); }
 
-  /* Logo fijo que vuelve al inicio */
-  #logo {
-    position:fixed;
-    top:0;
-    left:0;
-    height:60px;
-    width:240px; /* mismo color que la franja */
-    background-color:#000; /* cuadrado negro debajo del logo */
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:1.5rem;
-    font-weight:bold;
-    color:#fff;
+  /* Contenido principal */
+  #main-content { opacity:0; visibility:hidden; transition:opacity 1s ease; }
+
+  /* Carrusel */
+  #carousel {
+    width:90%; max-width:1200px; height:500px;
+    margin:120px auto 0;
+    position:relative;
+    overflow:hidden;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    opacity:0;
+    transform:translateY(-50px);
+    transition: all 1s ease;
+  }
+  .slide {
+    position:absolute; width:100%; height:100%;
+    background-size:cover; background-position:center;
+    opacity:0; transition: opacity 1s ease;
+  }
+  .slide.active { opacity:1; }
+  .arrow {
+    position:absolute; top:50%;
+    transform:translateY(-50%);
+    background-color: rgba(0,0,0,0.5);
+    color:#fff; border:none;
+    width:45px; height:45px;
+    border-radius:50%; cursor:pointer; font-size:1.5rem;
+  }
+  .arrow:hover { background-color: rgba(0,0,0,0.8); }
+  .arrow.left { left:15px; }
+  .arrow.right { right:15px; }
+  .dots {
+    position:absolute; bottom:15px; width:100%; text-align:center;
+  }
+  .dot {
+    display:inline-block;
+    width:12px; height:12px;
+    margin:5px;
+    border-radius:50%;
+    background-color:#000;
     cursor:pointer;
-    z-index:10;
-    text-decoration:none;
-    border-right:1px solid #222; /* leve borde separador */
+    transition: background-color 0.3s ease;
   }
+  .dot.active { background-color:#fff; }
 
   /* Secciones */
   .section {
-    width:80%;
-    max-width:1100px;
-    margin:120px auto;
-    opacity:0;
-    transform:translateY(60px);
+    width:80%; max-width:1100px;
+    margin:150px auto;
+    opacity:0; transform:translateY(60px);
     transition: all 0.8s ease;
   }
-
-  .section.visible {
-    opacity:1;
-    transform:translateY(0);
-  }
-
+  .section.visible { opacity:1; transform:translateY(0); }
   .section h2 { font-size:2rem; margin-bottom:20px; }
 
-  /* Proyectos */
-  .project {
-    display:flex;
-    align-items:center;
-    background-color:#f4f4f4;
-    border-radius:10px;
-    padding:20px;
-    margin-bottom:20px;
-    gap:20px;
-    transition: transform 0.3s ease;
+  /* Descripción */
+  #descripcion {
+    text-align:center;
+    color:#333;
+    font-size:1.1rem;
+    line-height:1.6;
   }
-
-  .project:hover {
-    transform:scale(1.03);
-  }
-
-  .project img {
-    width:180px;
-    height:120px;
-    object-fit:cover;
-    border-radius:10px;
-  }
-
-  .project-info { flex:1; }
-  .project-info h3 { margin-bottom:10px; }
-  .project-info p { color:#555; }
 
   /* Contacto */
   #contacto {
@@ -105,60 +149,65 @@
     padding:80px 20px;
     border-radius:20px;
   }
-
   #contacto h2 { font-size:2rem; margin-bottom:20px; }
   #contacto p { margin:10px 0; font-size:1rem; }
   #contacto a { color:#fff; text-decoration:none; font-weight:bold; }
   #contacto a:hover { text-decoration:underline; }
-
 </style>
 </head>
 <body>
 
-<!-- Logo fijo -->
-<a id="logo" href="index.html">Void Studio 3D</a>
+<div id="intro-text">Void Studio 3D</div>
 
-<!-- Menú -->
 <div id="menu-bar">
-  <a href="interiores.html">Diseño de interiores</a>
-  <a href="stands.html">Diseño de stands</a>
-  <a href="comerciales.html">Espacios comerciales</a>
-  <a href="eventos.html">Eventos y activaciones</a>
-  <a href="mobiliario.html">Diseño mobiliario</a>
-  <a href="automotriz.html">Diseño automotriz</a>
+  <div>
+    <a class="nav-tab" href="index.html">Inicio</a>
+    <a class="nav-tab" href="interiores.html">Interiores</a>
+    <a class="nav-tab" href="stands.html">Stands</a>
+    <a class="nav-tab" href="comerciales.html">Comerciales</a>
+    <a class="nav-tab" href="eventos.html">Eventos</a>
+    <a class="nav-tab" href="mobiliario.html">Mobiliario</a>
+    <a class="nav-tab" href="automotriz.html">Automotriz</a>
+  </div>
+  <div id="social-menu">
+    <button id="social-btn"><span></span><span></span><span></span></button>
+    <div class="dropdown">
+      <a href="https://instagram.com/voidstudio3d" target="_blank">
+        <img src="https://img.icons8.com/ios-glyphs/30/ffffff/instagram-new.png"/> Instagram</a>
+      <a href="https://facebook.com" target="_blank">
+        <img src="https://img.icons8.com/ios-glyphs/30/ffffff/facebook-new.png"/> Facebook</a>
+      <a href="https://linkedin.com" target="_blank">
+        <img src="https://img.icons8.com/ios-glyphs/30/ffffff/linkedin.png"/> LinkedIn</a>
+    </div>
+  </div>
 </div>
 
-<!-- Contenido principal -->
 <div id="main-content">
 
-  <!-- Sección Proyectos -->
-  <section class="section" id="proyectos">
-    <h2>Proyectos de Diseño de Interiores</h2>
-
-    <div class="project">
-      <img src="https://picsum.photos/200/150?1" alt="Proyecto 1">
-      <div class="project-info">
-        <h3>Departamento Moderno</h3>
-        <p>Espacio funcional con muebles a medida y tonos cálidos.</p>
-      </div>
+  <!-- Carrusel -->
+  <div id="carousel">
+    <div class="slide active" style="background-image:url('https://picsum.photos/1200/500?1');"></div>
+    <div class="slide" style="background-image:url('https://picsum.photos/1200/500?2');"></div>
+    <div class="slide" style="background-image:url('https://picsum.photos/1200/500?3');"></div>
+    <div class="slide" style="background-image:url('https://picsum.photos/1200/500?4');"></div>
+    <button class="arrow left">‹</button>
+    <button class="arrow right">›</button>
+    <div class="dots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
     </div>
+  </div>
 
-    <div class="project">
-      <img src="https://picsum.photos/200/150?2" alt="Proyecto 2">
-      <div class="project-info">
-        <h3>Casa Contemporánea</h3>
-        <p>Diseño minimalista con materiales naturales y mucha luminosidad.</p>
-      </div>
-    </div>
-
-    <div class="project">
-      <img src="https://picsum.photos/200/150?3" alt="Proyecto 3">
-      <div class="project-info">
-        <h3>Oficina Corporativa</h3>
-        <p>Diseño elegante y moderno optimizando el espacio de trabajo.</p>
-      </div>
-    </div>
-
+  <!-- Descripción -->
+  <section class="section" id="descripcion">
+    <h2>Diseño de Feria</h2>
+    <p>
+      Este proyecto de feria combina diseño funcional con una estética moderna y llamativa. 
+      Cada espacio fue pensado para maximizar la interacción con el público, 
+      priorizando la identidad visual de la marca y una experiencia inmersiva.
+    </p>
   </section>
 
   <!-- Contacto -->
@@ -169,18 +218,73 @@
     <p>Instagram: <a href="https://instagram.com/voidstudio3d" target="_blank">@voidstudio3d</a></p>
     <p>Ubicación: Cochabamba, Bolivia</p>
   </section>
+
 </div>
 
 <script>
-  // Animación al hacer scroll
+window.addEventListener('load', () => {
+  const introText = document.getElementById('intro-text');
+  const menu = document.getElementById('menu-bar');
+  const links = menu.querySelectorAll('.nav-tab');
+  const mainContent = document.getElementById('main-content');
+  const carousel = document.getElementById('carousel');
+
+  introText.addEventListener('click', () => {
+    document.body.style.overflowY = "auto";
+    introText.style.position = 'fixed';
+    introText.style.top = '17px';
+    introText.style.left = '30px';
+    introText.style.transform = 'translate(0,0)';
+    introText.style.fontSize = '1.5rem';
+    setTimeout(() => {
+      menu.style.opacity = '1';
+      menu.style.visibility = 'visible';
+      mainContent.style.opacity = '1';
+      mainContent.style.visibility = 'visible';
+      carousel.style.opacity = '1';
+      carousel.style.transform = 'translateY(0)';
+      links.forEach((link,i)=> setTimeout(()=> link.style.opacity='1', i*250));
+    },800);
+  });
+
+  // Carrusel
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  const prev = document.querySelector('.arrow.left');
+  const next = document.querySelector('.arrow.right');
+  let index = 0;
+
+  function showSlide(i){
+    slides.forEach(s => s.classList.remove('active'));
+    dots.forEach(d => d.classList.remove('active'));
+    slides[i].classList.add('active');
+    dots[i].classList.add('active');
+  }
+  next.addEventListener('click',()=>{ index=(index+1)%slides.length; showSlide(index); });
+  prev.addEventListener('click',()=>{ index=(index-1+slides.length)%slides.length; showSlide(index); });
+  dots.forEach((dot,i)=> dot.addEventListener('click',()=>{ index=i; showSlide(index); }));
+  setInterval(()=>{ index=(index+1)%slides.length; showSlide(index); },4000);
+
+  // Scroll animaciones
   const sections = document.querySelectorAll('.section');
   const observer = new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting) entry.target.classList.add('visible');
-    });
+    entries.forEach(entry=>{ if(entry.isIntersecting) entry.target.classList.add('visible'); });
   }, { threshold:0.2 });
+  sections.forEach(sec=>observer.observe(sec));
 
-  sections.forEach(sec => observer.observe(sec));
+  // Social menu
+  const socialBtn = document.getElementById('social-btn');
+  const dropdown = document.querySelector('#social-menu .dropdown');
+  socialBtn.addEventListener('click', ()=> dropdown.style.display = dropdown.style.display==='flex'?'none':'flex');
+  document.addEventListener('click', e=>{ if(!socialBtn.contains(e.target) && !dropdown.contains(e.target)) dropdown.style.display='none'; });
+
+  // Fondo cambia con scroll
+  window.addEventListener('scroll', ()=>{
+    let scroll = window.scrollY;
+    let color = Math.min(scroll/800,1)*255;
+    document.body.style.backgroundColor = `rgb(${color},${color},${color})`;
+  });
+});
 </script>
 
 </body>
