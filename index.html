@@ -37,19 +37,20 @@ body {
   background-color:#000;
   display:flex;
   align-items:center;
-  padding-left:250px;
+  padding:0 20px;
   justify-content:space-between;
   opacity:0;
   visibility:hidden;
   transition:opacity 1s ease;
   z-index:5;
+  flex-wrap:wrap;
 }
 
 /* Pestañas de navegación */
 .nav-tab {
   color:#fff;
   text-decoration:none;
-  margin-right:30px;
+  margin:5px 10px;
   font-size:1rem;
   opacity:0;
   transition: opacity 0.5s ease, transform 0.3s ease;
@@ -66,7 +67,7 @@ body {
 /* Menú hamburguesa social */
 #social-menu {
   position:relative;
-  margin-right:20px;
+  margin-right:10px;
 }
 
 #social-menu button {
@@ -91,13 +92,13 @@ body {
 #social-menu .dropdown {
   display:none;
   position:absolute;
-  top:25px;
+  top:30px;
   right:0;
   background-color:#111;
   border-radius:5px;
   overflow:hidden;
   flex-direction:column;
-  min-width:150px;
+  min-width:140px;
   z-index:10;
 }
 
@@ -195,7 +196,7 @@ body {
 
 /* Secciones */
 .section {
-  width:80%;
+  width:85%;
   max-width:1100px;
   margin:150px auto;
   opacity:0;
@@ -225,6 +226,7 @@ body {
   cursor:pointer;
   overflow:hidden;
   position:relative;
+  flex-wrap:wrap;
 }
 
 .project img {
@@ -258,6 +260,30 @@ body {
 #contacto a { color:#fff; text-decoration:none; font-weight:bold; }
 #contacto a:hover { text-decoration:underline; }
 
+/* ====== RESPONSIVE DESIGN ====== */
+@media (max-width: 900px) {
+  #intro-text { font-size:3rem; }
+  #carousel { height:350px; }
+  #menu-bar { padding:10px; justify-content:center; }
+  .nav-tab { font-size:0.9rem; margin:5px; }
+}
+
+@media (max-width: 600px) {
+  #intro-text { font-size:2.5rem; text-align:center; }
+  #carousel { height:250px; }
+  .arrow { width:35px; height:35px; font-size:1.2rem; }
+  .project { flex-direction:column; text-align:center; }
+  .project img { width:100%; height:auto; }
+  #contacto h2 { font-size:1.5rem; }
+  #contacto p { font-size:0.9rem; }
+  .dots { bottom:10px; }
+}
+
+@media (max-width: 400px) {
+  #intro-text { font-size:2rem; }
+  .nav-tab { font-size:0.8rem; }
+  .arrow { width:30px; height:30px; font-size:1rem; }
+}
 </style>
 </head>
 <body>
@@ -269,17 +295,15 @@ body {
     <a class="nav-tab" href="interiores.html">Diseño de interiores</a>
     <a class="nav-tab" href="stands.html">Diseño de stands</a>
     <a class="nav-tab" href="comerciales.html">Espacios comerciales</a>
-    <a class="nav-tab" href="eventos.html">Eventos y activaciones</a>
-    <a class="nav-tab" href="mobiliario.html">Diseño mobiliario</a>
-    <a class="nav-tab" href="automotriz.html">Diseño automotriz</a>
+    <a class="nav-tab" href="eventos.html">Eventos</a>
+    <a class="nav-tab" href="mobiliario.html">Mobiliario</a>
+    <a class="nav-tab" href="automotriz.html">Automotriz</a>
   </div>
 
   <!-- Menú social -->
   <div id="social-menu">
     <button id="social-btn">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
     <div class="dropdown">
       <a href="https://instagram.com/voidstudio3d" target="_blank"><img src="https://img.icons8.com/ios-glyphs/30/ffffff/instagram-new.png"/> Instagram</a>
@@ -296,43 +320,21 @@ body {
     <div class="slide active" style="background-image:url('https://picsum.photos/1200/500?1');"></div>
     <div class="slide" style="background-image:url('https://picsum.photos/1200/500?2');"></div>
     <div class="slide" style="background-image:url('https://picsum.photos/1200/500?3');"></div>
-    <div class="slide" style="background-image:url('https://picsum.photos/1200/500?4');"></div>
-    <div class="slide" style="background-image:url('https://picsum.photos/1200/500?5');"></div>
-    <div class="slide" style="background-image:url('https://picsum.photos/1200/500?6');"></div>
-    <div class="slide" style="background-image:url('https://picsum.photos/1200/500?7');"></div>
-    <div class="slide" style="background-image:url('https://picsum.photos/1200/500?8');"></div>
-
     <button class="arrow left">‹</button>
     <button class="arrow right">›</button>
-
     <div class="dots">
-      <span class="dot active"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
+      <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
     </div>
   </div>
 
   <!-- Proyectos -->
   <section class="section" id="proyectos">
     <h2>Proyectos destacados</h2>
-    <div class="project" data-images="https://picsum.photos/200/150?1,https://picsum.photos/200/150?11" onclick="window.location.href='proyecto1.html'">
+    <div class="project" data-images="https://picsum.photos/200/150?1,https://picsum.photos/200/150?11" onclick="window.location.href='feria.html'">
       <img src="https://picsum.photos/200/150?1" alt="Proyecto 1">
       <div class="project-info">
         <h3>Diseño interior moderno</h3>
         <p>Espacio contemporáneo con materiales naturales y una atmósfera acogedora.</p>
-      </div>
-    </div>
-
-    <div class="project" data-images="https://picsum.photos/200/150?2,https://picsum.photos/200/150?21" onclick="window.location.href='proyecto2.html'">
-      <img src="https://picsum.photos/200/150?2" alt="Proyecto 2">
-      <div class="project-info">
-        <h3>Stand para evento</h3>
-        <p>Estructura innovadora que resalta la marca y optimiza la experiencia del visitante.</p>
       </div>
     </div>
   </section>
@@ -356,7 +358,7 @@ window.addEventListener('load', () => {
   const carousel = document.getElementById('carousel');
 
   introText.addEventListener('click', () => {
-    document.body.style.overflowY = "auto"; 
+    document.body.style.overflowY = "auto";
     introText.style.position = 'fixed';
     introText.style.top = '17px';
     introText.style.left = '30px';
@@ -392,10 +394,9 @@ window.addEventListener('load', () => {
   prev.addEventListener('click',()=>{ index=(index-1+slides.length)%slides.length; showSlide(index); });
   dots.forEach((dot,i)=>{ dot.addEventListener('click',()=>{ index=i; showSlide(index); }); });
 
-  // Carrusel automático cada 4s
   setInterval(()=>{ index=(index+1)%slides.length; showSlide(index); },4000);
 
-  // Aparición por scroll
+  // Animación al hacer scroll
   const sections = document.querySelectorAll('.section');
   const observer = new IntersectionObserver(entries=>{
     entries.forEach(entry=>{ if(entry.isIntersecting) entry.target.classList.add('visible'); });
@@ -413,7 +414,7 @@ window.addEventListener('load', () => {
       interval = setInterval(()=>{
         imgIndex=(imgIndex+1)%imgs.length;
         imgEl.src = imgs[imgIndex];
-      },1500); // más lento
+      },1500);
     });
     p.addEventListener('mouseleave', ()=>{
       clearInterval(interval);
@@ -429,7 +430,7 @@ window.addEventListener('load', () => {
   socialBtn.addEventListener('click', ()=>{ dropdown.style.display = dropdown.style.display==='flex'?'none':'flex'; });
   document.addEventListener('click', e=>{ if(!socialBtn.contains(e.target) && !dropdown.contains(e.target)) dropdown.style.display='none'; });
 
-  // Fondo cambia al scroll
+  // Fondo cambia con scroll
   window.addEventListener('scroll', ()=>{
     let scroll = window.scrollY;
     let color = Math.min(scroll/800,1)*255;
@@ -437,6 +438,5 @@ window.addEventListener('load', () => {
   });
 });
 </script>
-
 </body>
 </html>
