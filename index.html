@@ -12,15 +12,21 @@
 
   /* Logo (puede ser imagen o texto) */
   #intro-text {
-    position:absolute; inset:auto auto 0 0; /* sobreescrito luego */
-    top:50%; left:50%; transform:translate(-50%,-50%);
-    font-size:5rem; font-weight:bold; color:#fff; cursor:pointer;
-    transition: all 1s ease, color .5s ease; z-index:10; /* baja luego del click */
-  }
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    font-size:30rem;
+    font-weight:bold;
+    color:#fff;
+    cursor:pointer;
+    transition: all 1s ease, color .5s ease;
+    z-index:10;
+}
 
   /* Barra superior */
   #menu-bar {
-    position:fixed; top:0; left:0; height:60px; width:100%; background:#000;
+    position:fixed; top:0; left:0; height:45px; width:100%; background:#000;
     display:flex; align-items:center; justify-content:space-between;
     padding-left:var(--logo-width); /* deja espacio para el logo */
     opacity:0; visibility:hidden; transition:opacity 1s ease; z-index:1000; /* por encima del logo */
@@ -53,7 +59,7 @@
   #main-content { opacity:0; visibility:hidden; transition:opacity 1s ease; }
 
   /* Carrusel */
-  #carousel { width:90%; max-width:2000px; height:900px; margin:120px auto 0; position:relative; overflow:hidden; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,.2); opacity:0; transform:translateY(-50px); transition:all 1s ease; }
+  #carousel { width:100%; max-width:1800px; height:1000px; margin:200px auto 0; position:relative; overflow:hidden; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,.2); opacity:0; transform:translateY(-50px); transition:all 1s ease; }
   .slide { position:absolute; inset:0; background-size:cover; background-position:center; opacity:0; transition:opacity 1s ease; }
   .slide.active { opacity:1; }
   .arrow { position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,.5); color:#fff; border:none; width:45px; height:45px; border-radius:50%; cursor:pointer; font-size:1.5rem; }
@@ -69,10 +75,12 @@
   .section h2 { font-size:2rem; margin-bottom:20px; color:#fff; }
 
   /* Proyectos */
+  .projects-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:24px; width:100%; }
+  .project { display:flex; flex-direction:row; align-items:center; background:#f4f4f4; border-radius:10px; padding:24px; gap:20px; cursor:pointer; overflow:hidden; position:relative; width:100%; }
   .project { display:flex; align-items:center; background:#f4f4f4; border-radius:10px; padding:20px; margin-bottom:20px; gap:20px; cursor:pointer; overflow:hidden; position:relative; }
-  .project img { width:180px; height:180px; object-fit:cover; border-radius:10px; transition:transform .3s ease; }
+  .project img { width:65%; height:auto; object-fit:cover; border-radius:10px; transition:transform .3s ease; }
   .project:hover img { transform:scale(1.05); }
-  .project-info { flex:1; }
+  .project-info { width:40%; display:flex; flex-direction:column; justify-content:center; }
   .project-info h3 { margin-bottom:10px; }
   .project-info p { color:#555; }
 
@@ -91,7 +99,37 @@
   }
   @media (max-width: 768px) {
     :root { --logo-width: 100px; }
-    #intro-text { font-size:1.25rem; top:12px !important; left:12px !important; transform:none !important; }
+    #intro-text { font-size:1rem; }
+    #menu-bar { height:100px; padding-left:var(--logo-width); }
+    #nav-container { max-width:calc(100vw - 200px); }
+    .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
+    #carousel { width:100%; height:45vh; margin-top:90px; }
+    .section { width:92%; margin:80px auto; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project { flex-direction:column; align-items:flex-start; }
+    .project img { width:100%; height:180px; }
+  }
+    #intro-text { font-size:1rem; }
+    #menu-bar { height:64px; padding-left:var(--logo-width); }
+    #nav-container { max-width:calc(100vw - 140px); }
+    .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
+    #carousel { width:100%; height:45vh; margin-top:90px; }
+    .section { width:92%; margin:80px auto; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project { width:100%; }
+    .project img { width:100%; height:220px; }
+  }
+    #intro-text { font-size:1rem; top:12px !important; left:12px !important; transform:none !important; }
+    #menu-bar { height:64px; padding-left:var(--logo-width); }
+    #nav-container { max-width:calc(100vw - 140px); }
+    .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
+    #carousel { width:100%; height:45vh; margin-top:90px; }
+    .section { width:92%; margin:80px auto; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project { width:100%; }
+    .project img { width:100%; height:220px; }
+  }
+    #intro-text { font-size:1rem; top:12px !important; left:12px !important; transform:none !important; }
     #menu-bar { height:64px; padding-left:var(--logo-width); }
     #nav-container { max-width:calc(100vw - 140px); } /* deja sitio para social */
     .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
@@ -104,12 +142,39 @@
     :root { --logo-width: 88px; }
     #carousel { height:40vh; }
   }
+  /* === Overrides finales para asegurar 3 columnas en desktop y logo centrado === */
+  @media (min-width: 993px) {
+    .projects-grid { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap:24px; width:100%; }
+  }
+  @media (min-width: 769px) and (max-width: 992px) {
+    .projects-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap:24px; width:100%; }
+  }
+  @media (max-width: 768px) {
+    .projects-grid { display:grid; grid-template-columns: 1fr !important; gap:20px; width:100%; }
+  }
+  /* Recentrar logo por si alguna regla previa lo movió antes del clic */
+  #intro-text.centered { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); }
+  /* Override fuerte para logo inicial */
+  #intro-text.centered { font-size:8rem !important; top:50% !important; left:50% !important; transform:translate(-50%, -50%) !important; }
+  /* Estados del logo para animación */
+  #intro-text.centered { position:absolute !important; top:50% !important; left:50% !important; transform:translate(-50%, -50%) !important; font-size:2rem !important; }
+  #intro-text.sticky { position:fixed !important; top:14px !important; left:16px !important; transform:none !important; font-size:1.5rem !important; z-index:1001 !important; }
+  /* Override específico para el tamaño del logo SOLO en celular (menú) */
+  @media (max-width: 768px) {
+    #intro-text.sticky { font-size:1rem !important; }
+  }
+  /* Evitar que el logo del intro se parta en varias líneas en celular */
+  @media (max-width: 768px) {
+    #intro-text.centered {
+      white-space: nowrap !important;
+    }
+  }
 </style>
 </head>
 <body>
 
   <!-- Logo / Marca -->
-  <div id="intro-text">Void Studio 3D</div>
+  <div id="intro-text" class="centered">Void Studio 3D</div>
 
   <!-- Barra de navegación -->
   <div id="menu-bar">
@@ -167,18 +232,48 @@
     <!-- Proyectos -->
     <section class="section" id="proyectos">
       <h2>Proyectos destacados</h2>
-      <div class="project" data-images="images/proyectos/proyecto-01-01.jpg,images/proyectos/proyecto-01-02.jpg" onclick="window.location.href='proyecto1.html'">
-        <img src="images/proyectos/proyecto-01-01.jpg" alt="Proyecto 1" loading="lazy" />
-        <div class="project-info">
-          <h3>Diseño interior moderno</h3>
-          <p>Espacio contemporáneo con materiales naturales y una atmósfera acogedora.</p>
+      <div class="projects-grid">
+        <div class="project" data-images="images/proyectos/proyecto-01-01.jpg,images/proyectos/proyecto-01-02.jpg" onclick="window.location.href='proyecto1.html'">
+          <img src="images/proyectos/proyecto-01-01.jpg" alt="Proyecto 1" loading="lazy" />
+          <div class="project-info">
+            <h3>Proyecto 1</h3>
+            <p>Descripción breve del proyecto 1.</p>
+          </div>
         </div>
-      </div>
-      <div class="project" data-images="images/proyectos/proyecto-02-01.jpg,images/proyectos/proyecto-02-02.jpg" onclick="window.location.href='proyecto2.html'">
-        <img src="images/proyectos/proyecto-02-01.jpg" alt="Proyecto 2" loading="lazy" />
-        <div class="project-info">
-          <h3>Stand para evento</h3>
-          <p>Estructura innovadora que resalta la marca y optimiza la experiencia del visitante.</p>
+        <div class="project" data-images="images/proyectos/proyecto-02-01.jpg,images/proyectos/proyecto-02-02.jpg" onclick="window.location.href='proyecto2.html'">
+          <img src="images/proyectos/proyecto-02-01.jpg" alt="Proyecto 2" loading="lazy" />
+          <div class="project-info">
+            <h3>Proyecto 2</h3>
+            <p>Descripción breve del proyecto 2.</p>
+          </div>
+        </div>
+        <div class="project" data-images="images/proyectos/proyecto-03-01.jpg,images/proyectos/proyecto-03-02.jpg" onclick="window.location.href='proyecto3.html'">
+          <img src="images/proyectos/proyecto-03-01.jpg" alt="Proyecto 3" loading="lazy" />
+          <div class="project-info">
+            <h3>Proyecto 3</h3>
+            <p>Descripción breve del proyecto 3.</p>
+          </div>
+        </div>
+        <div class="project" data-images="images/proyectos/proyecto-04-01.jpg,images/proyectos/proyecto-04-02.jpg" onclick="window.location.href='proyecto4.html'">
+          <img src="images/proyectos/proyecto-04-01.jpg" alt="Proyecto 4" loading="lazy" />
+          <div class="project-info">
+            <h3>Proyecto 4</h3>
+            <p>Descripción breve del proyecto 4.</p>
+          </div>
+        </div>
+        <div class="project" data-images="images/proyectos/proyecto-05-01.jpg,images/proyectos/proyecto-05-02.jpg" onclick="window.location.href='proyecto5.html'">
+          <img src="images/proyectos/proyecto-05-01.jpg" alt="Proyecto 5" loading="lazy" />
+          <div class="project-info">
+            <h3>Proyecto 5</h3>
+            <p>Descripción breve del proyecto 5.</p>
+          </div>
+        </div>
+        <div class="project" data-images="images/proyectos/proyecto-06-01.jpg,images/proyectos/proyecto-06-02.jpg" onclick="window.location.href='proyecto6.html'">
+          <img src="images/proyectos/proyecto-06-01.jpg" alt="Proyecto 6" loading="lazy" />
+          <div class="project-info">
+            <h3>Proyecto 6</h3>
+            <p>Descripción breve del proyecto 6.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -206,12 +301,8 @@ window.addEventListener('load', () => {
     document.body.style.overflowY = 'auto';
 
     /* mueve logo a esquina y quítalo de encima del menú */
-    introText.style.position = 'fixed';
-    introText.style.top = '14px';
-    introText.style.left = '16px';
-    introText.style.transform = 'translate(0,0)';
-    introText.style.fontSize = '1.5rem';
-    introText.style.zIndex = '1001'; // encima de la barra
+    introText.classList.remove('centered');
+    introText.classList.add('sticky'); // encima de la barra
 
     setTimeout(() => {
       menu.style.opacity = '1';
