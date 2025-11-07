@@ -343,7 +343,7 @@ window.addEventListener('load', () => {
   next.addEventListener('click',()=>{ index=(index+1)%slides.length; showSlide(index); });
   prev.addEventListener('click',()=>{ index=(index-1+slides.length)%slides.length; showSlide(index); });
   dots.forEach((dot,i)=> dot.addEventListener('click',()=>{ index=i; showSlide(index); }));
-  setInterval(()=>{ index=(index+1)%slides.length; showSlide(index); }, 4000);
+  setInterval(()=>{ index=(index+1)%slides.length; showSlide(index); }, 8000);
 
   // Aparición por scroll
   const sections = document.querySelectorAll('.section');
@@ -380,6 +380,7 @@ window.addEventListener('load', () => {
 </script>
 </body>
 </html>
+
 
 
 
