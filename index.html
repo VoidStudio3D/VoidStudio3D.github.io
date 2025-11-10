@@ -22,21 +22,20 @@
     cursor:pointer;
     transition: all 1s ease, color .5s ease;
     z-index:10;
-}
+  }
 
   /* Barra superior */
   #menu-bar {
     position:fixed; top:0; left:0; height:45px; width:100%; background:#000;
     display:flex; align-items:center; justify-content:space-between;
-    padding-left:var(--logo-width); /* deja espacio para el logo */
-    opacity:0; visibility:hidden; transition:opacity 1s ease; z-index:1000; /* por encima del logo */
+    padding-left:var(--logo-width);
+    opacity:0; visibility:hidden; transition:opacity 1s ease; z-index:1000;
   }
 
   /* Contenedor desplazable de tabs */
   #nav-container {
     display:block; overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling:touch;
-    scrollbar-width:none; /* Firefox */
-    padding:0 12px;
+    scrollbar-width:none; padding:0 12px;
   }
   #nav-container::-webkit-scrollbar { display:none; }
 
@@ -59,7 +58,7 @@
   #main-content { opacity:0; visibility:hidden; transition:opacity 1s ease; }
 
   /* Carrusel */
-  #carousel { width:100%; max-width:2000px; height:1200px; margin:300px auto 0; position:relative; overflow:hidden; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,.2); opacity:0; transform:translateY(-50px); transition:all 1s ease; }
+  #carousel { width:100%; max-width:1800px; height:1000px; margin:200px auto 0; position:relative; overflow:hidden; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,.2); opacity:0; transform:translateY(-50px); transition:all 1s ease; }
   .slide { position:absolute; inset:0; background-size:cover; background-position:center; opacity:0; transition:opacity 1s ease; }
   .slide.active { opacity:1; }
   .arrow { position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,.5); color:#fff; border:none; width:45px; height:45px; border-radius:50%; cursor:pointer; font-size:1.5rem; }
@@ -91,6 +90,42 @@
   #contacto a { color:#fff; text-decoration:none; font-weight:bold; }
   #contacto a:hover { text-decoration:underline; }
 
+  /* ---------- Lightbox (visor) ---------- */
+  #lightbox {
+    position:fixed; inset:0; background:rgba(0,0,0,.9);
+    display:none; align-items:center; justify-content:center; z-index:2000;
+  }
+  #lightbox.open { display:flex; }
+  .lb-inner {
+    position:relative; max-width:92vw; max-height:86vh;
+    display:flex; align-items:center; justify-content:center;
+  }
+  #lb-img {
+    max-width:92vw; max-height:86vh; width:auto; height:auto; display:block; border-radius:10px;
+    box-shadow:0 10px 30px rgba(0,0,0,.6);
+  }
+  .lb-arrow {
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:46px; height:46px; border-radius:999px; border:none; cursor:pointer;
+    background:rgba(0,0,0,.55); color:#fff; font-size:22px;
+    display:grid; place-items:center;
+  }
+  .lb-arrow:hover { background:rgba(0,0,0,.8); }
+  #lb-prev { left:10px; }
+  #lb-next { right:10px; }
+  #lb-close {
+    position:absolute; top:-54px; right:0; width:44px; height:44px; border-radius:999px;
+    border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.1); color:#fff; cursor:pointer; font-size:18px;
+  }
+  /* Enlace al proyecto: arriba, centrado dentro de la imagen */
+  #lb-link {
+    position:absolute; top:10px; left:50%; transform:translateX(-50%);
+    background:rgba(0,0,0,.6); color:#fff; text-decoration:none; font-weight:700;
+    padding:10px 14px; border-radius:999px; border:1px solid rgba(255,255,255,.25);
+    backdrop-filter:blur(3px);
+  }
+  #lb-link:hover { background:rgba(0,0,0,.8); }
+
   /* ---------- Responsivo ---------- */
   @media (max-width: 992px) {
     :root { --logo-width: 190px; }
@@ -109,40 +144,41 @@
     .project { flex-direction:column; align-items:flex-start; }
     .project img { width:100%; height:180px; }
   }
-    #intro-text { font-size:1rem; }
-    #menu-bar { height:64px; padding-left:var(--logo-width); }
-    #nav-container { max-width:calc(100vw - 140px); }
-    .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
-    #carousel { width:100%; height:45vh; margin-top:90px; }
-    .section { width:92%; margin:80px auto; }
-    .projects-grid { grid-template-columns: 1fr; }
-    .project { width:100%; }
-    .project img { width:100%; height:220px; }
-  }
-    #intro-text { font-size:1rem; top:12px !important; left:12px !important; transform:none !important; }
-    #menu-bar { height:64px; padding-left:var(--logo-width); }
-    #nav-container { max-width:calc(100vw - 140px); }
-    .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
-    #carousel { width:100%; height:45vh; margin-top:90px; }
-    .section { width:92%; margin:80px auto; }
-    .projects-grid { grid-template-columns: 1fr; }
-    .project { width:100%; }
-    .project img { width:100%; height:220px; }
-  }
-    #intro-text { font-size:1rem; top:12px !important; left:12px !important; transform:none !important; }
-    #menu-bar { height:64px; padding-left:var(--logo-width); }
-    #nav-container { max-width:calc(100vw - 140px); } /* deja sitio para social */
-    .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
-    #carousel { width:100%; height:45vh; margin-top:90px; }
-    .section { width:92%; margin:80px auto; }
-    .project { flex-direction:column; align-items:flex-start; }
-    .project img { width:100%; height:180px; }
-  }
+  /* (bloques repetidos de overrides originales mantenidos para no alterar tu layout) */
+  #intro-text { font-size:1rem; }
+  #menu-bar { height:64px; padding-left:var(--logo-width); }
+  #nav-container { max-width:calc(100vw - 140px); }
+  .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
+  #carousel { width:100%; height:45vh; margin-top:90px; }
+  .section { width:92%; margin:80px auto; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .project { width:100%; }
+  .project img { width:100%; height:220px; }
+
+  #intro-text { font-size:1rem; top:12px !important; left:12px !important; transform:none !important; }
+  #menu-bar { height:64px; padding-left:var(--logo-width); }
+  #nav-container { max-width:calc(100vw - 140px); }
+  .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
+  #carousel { width:100%; height:45vh; margin-top:90px; }
+  .section { width:92%; margin:80px auto; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .project { width:100%; }
+  .project img { width:100%; height:220px; }
+
+  #intro-text { font-size:1rem; top:12px !important; left:12px !important; transform:none !important; }
+  #menu-bar { height:64px; padding-left:var(--logo-width); }
+  #nav-container { max-width:calc(100vw - 140px); }
+  .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
+  #carousel { width:100%; height:45vh; margin-top:90px; }
+  .section { width:92%; margin:80px auto; }
+  .project { flex-direction:column; align-items:flex-start; }
+  .project img { width:100%; height:180px; }
+
   @media (max-width: 420px) {
     :root { --logo-width: 88px; }
     #carousel { height:40vh; }
   }
-  /* === Overrides finales para asegurar 3 columnas en desktop y logo centrado === */
+
   @media (min-width: 993px) {
     .projects-grid { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap:24px; width:100%; }
   }
@@ -152,23 +188,12 @@
   @media (max-width: 768px) {
     .projects-grid { display:grid; grid-template-columns: 1fr !important; gap:20px; width:100%; }
   }
-  /* Recentrar logo por si alguna regla previa lo movió antes del clic */
-  #intro-text.centered { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); }
-  /* Override fuerte para logo inicial */
-  #intro-text.centered { font-size:8rem !important; top:50% !important; left:50% !important; transform:translate(-50%, -50%) !important; }
+
   /* Estados del logo para animación */
   #intro-text.centered { position:absolute !important; top:50% !important; left:50% !important; transform:translate(-50%, -50%) !important; font-size:2rem !important; }
   #intro-text.sticky { position:fixed !important; top:14px !important; left:16px !important; transform:none !important; font-size:1.5rem !important; z-index:1001 !important; }
-  /* Override específico para el tamaño del logo SOLO en celular (menú) */
-  @media (max-width: 768px) {
-    #intro-text.sticky { font-size:1rem !important; }
-  }
-  /* Evitar que el logo del intro se parta en varias líneas en celular */
-  @media (max-width: 768px) {
-    #intro-text.centered {
-      white-space: nowrap !important;
-    }
-  }
+  @media (max-width: 768px) { #intro-text.sticky { font-size:1rem !important; } }
+  @media (max-width: 768px) { #intro-text.centered { white-space: nowrap !important; } }
 </style>
 </head>
 <body>
@@ -204,11 +229,10 @@
   <div id="main-content">
     <!-- Carrusel -->
     <div id="carousel">
-      <!-- Reemplazado por imágenes locales -->
       <div class="slide active" style="background-image:url('images/hero/hero-01.jpg');"></div>
-      <div class="slide" style="background-image:url('images/hero/hero-02.png');"></div>
+      <div class="slide" style="background-image:url('images/hero/hero-02.jpg');"></div>
       <div class="slide" style="background-image:url('images/hero/hero-03.jpg');"></div>
-      <div class="slide" style="background-image:url('images/hero/hero-04.png');"></div>
+      <div class="slide" style="background-image:url('images/hero/hero-04.jpg');"></div>
       <div class="slide" style="background-image:url('images/hero/hero-05.jpg');"></div>
       <div class="slide" style="background-image:url('images/hero/hero-06.jpg');"></div>
       <div class="slide" style="background-image:url('images/hero/hero-07.jpg');"></div>
@@ -233,42 +257,43 @@
     <section class="section" id="proyectos">
       <h2>Proyectos destacados</h2>
       <div class="projects-grid">
-        <div class="project" data-images="images/proyectos/proyecto-01-01.jpg,images/proyectos/proyecto-01-02.jpg" onclick="window.location.href='proyecto1.html'">
+        <!-- Usa data-link en lugar de onclick para abrir visor y tener enlace al proyecto -->
+        <div class="project" data-link="proyecto1.html" data-images="images/proyectos/proyecto-01-01.jpg,images/proyectos/proyecto-01-02.jpg">
           <img src="images/proyectos/proyecto-01-01.jpg" alt="Proyecto 1" loading="lazy" />
           <div class="project-info">
             <h3>Proyecto 1</h3>
             <p>Descripción breve del proyecto 1.</p>
           </div>
         </div>
-        <div class="project" data-images="images/proyectos/proyecto-02-01.jpg,images/proyectos/proyecto-02-02.jpg" onclick="window.location.href='proyecto2.html'">
+        <div class="project" data-link="proyecto2.html" data-images="images/proyectos/proyecto-02-01.jpg,images/proyectos/proyecto-02-02.jpg">
           <img src="images/proyectos/proyecto-02-01.jpg" alt="Proyecto 2" loading="lazy" />
           <div class="project-info">
             <h3>Proyecto 2</h3>
             <p>Descripción breve del proyecto 2.</p>
           </div>
         </div>
-        <div class="project" data-images="images/proyectos/proyecto-03-01.jpg,images/proyectos/proyecto-03-02.jpg" onclick="window.location.href='proyecto3.html'">
+        <div class="project" data-link="proyecto3.html" data-images="images/proyectos/proyecto-03-01.jpg,images/proyectos/proyecto-03-02.jpg">
           <img src="images/proyectos/proyecto-03-01.jpg" alt="Proyecto 3" loading="lazy" />
           <div class="project-info">
             <h3>Proyecto 3</h3>
             <p>Descripción breve del proyecto 3.</p>
           </div>
         </div>
-        <div class="project" data-images="images/proyectos/proyecto-04-01.jpg,images/proyectos/proyecto-04-02.jpg" onclick="window.location.href='proyecto4.html'">
+        <div class="project" data-link="proyecto4.html" data-images="images/proyectos/proyecto-04-01.jpg,images/proyectos/proyecto-04-02.jpg">
           <img src="images/proyectos/proyecto-04-01.jpg" alt="Proyecto 4" loading="lazy" />
           <div class="project-info">
             <h3>Proyecto 4</h3>
             <p>Descripción breve del proyecto 4.</p>
           </div>
         </div>
-        <div class="project" data-images="images/proyectos/proyecto-05-01.jpg,images/proyectos/proyecto-05-02.jpg" onclick="window.location.href='proyecto5.html'">
+        <div class="project" data-link="proyecto5.html" data-images="images/proyectos/proyecto-05-01.jpg,images/proyectos/proyecto-05-02.jpg">
           <img src="images/proyectos/proyecto-05-01.jpg" alt="Proyecto 5" loading="lazy" />
           <div class="project-info">
             <h3>Proyecto 5</h3>
             <p>Descripción breve del proyecto 5.</p>
           </div>
         </div>
-        <div class="project" data-images="images/proyectos/proyecto-06-01.jpg,images/proyectos/proyecto-06-02.jpg" onclick="window.location.href='proyecto6.html'">
+        <div class="project" data-link="proyecto6.html" data-images="images/proyectos/proyecto-06-01.jpg,images/proyectos/proyecto-06-02.jpg">
           <img src="images/proyectos/proyecto-06-01.jpg" alt="Proyecto 6" loading="lazy" />
           <div class="project-info">
             <h3>Proyecto 6</h3>
@@ -281,11 +306,22 @@
     <!-- Contacto -->
     <section class="section" id="contacto">
       <h2>Información de contacto</h2>
-      <p>Email: <a href="mailto:@gmail.com">nilsbasic8@gmail.com</a></p>
-      <p>Teléfono: <a href="tel:+59170000000">+591 79779088</a></p>
-      <p>Instagram: <a href="https://instagram.com/voidstudio" target="_blank">@voidstudio3d</a></p>
+      <p>Email: <a href="mailto:voidstudio3d@gmail.com">voidstudio3d@gmail.com</a></p>
+      <p>Teléfono: <a href="tel:+59170000000">+591 700 00000</a></p>
+      <p>Instagram: <a href="https://instagram.com/voidstudio3d" target="_blank">@voidstudio3d</a></p>
       <p>Ubicación: Cochabamba, Bolivia</p>
     </section>
+  </div>
+
+  <!-- Lightbox (visor en la misma página) -->
+  <div id="lightbox" aria-hidden="true">
+    <div class="lb-inner">
+      <a id="lb-link" href="#" target="_self">Ver página del proyecto</a>
+      <button id="lb-prev" class="lb-arrow" aria-label="Anterior">‹</button>
+      <img id="lb-img" src="" alt="Proyecto ampliado" />
+      <button id="lb-next" class="lb-arrow" aria-label="Siguiente">›</button>
+      <button id="lb-close" aria-label="Cerrar">✕</button>
+    </div>
   </div>
 
 <script>
@@ -299,10 +335,8 @@ window.addEventListener('load', () => {
 
   introText.addEventListener('click', () => {
     document.body.style.overflowY = 'auto';
-
-    /* mueve logo a esquina y quítalo de encima del menú */
     introText.classList.remove('centered');
-    introText.classList.add('sticky'); // encima de la barra
+    introText.classList.add('sticky');
 
     setTimeout(() => {
       menu.style.opacity = '1';
@@ -315,7 +349,7 @@ window.addEventListener('load', () => {
     }, 400);
   });
 
-  // Habilitar arrastre con mouse para el menú horizontal (touch ya funciona con overflow-x)
+  // Arrastre horizontal del menú
   let isDown = false; let startX = 0; let scrollLeft = 0;
   navContainer.addEventListener('mousedown', (e) => {
     isDown = true; navContainer.classList.add('dragging');
@@ -325,7 +359,7 @@ window.addEventListener('load', () => {
   navContainer.addEventListener('mouseup', () => { isDown = false; navContainer.classList.remove('dragging'); });
   navContainer.addEventListener('mousemove', (e) => {
     if (!isDown) return; e.preventDefault();
-    const x = e.pageX - navContainer.offsetLeft; const walk = (x - startX) * 2; // sensibilidad
+    const x = e.pageX - navContainer.offsetLeft; const walk = (x - startX) * 2;
     navContainer.scrollLeft = scrollLeft - walk;
   });
 
@@ -343,7 +377,7 @@ window.addEventListener('load', () => {
   next.addEventListener('click',()=>{ index=(index+1)%slides.length; showSlide(index); });
   prev.addEventListener('click',()=>{ index=(index-1+slides.length)%slides.length; showSlide(index); });
   dots.forEach((dot,i)=> dot.addEventListener('click',()=>{ index=i; showSlide(index); }));
-  setInterval(()=>{ index=(index+1)%slides.length; showSlide(index); }, 8000);
+  setInterval(()=>{ index=(index+1)%slides.length; showSlide(index); }, 4000);
 
   // Aparición por scroll
   const sections = document.querySelectorAll('.section');
@@ -352,17 +386,19 @@ window.addEventListener('load', () => {
   }, { threshold:0.2 });
   sections.forEach(sec => observer.observe(sec));
 
-  // Previsualización proyectos
+  // Previsualización proyectos (hover)
   const projects = document.querySelectorAll('.project');
   projects.forEach(p => {
-    const imgs = p.dataset.images.split(',');
+    const imgs = p.dataset.images.split(',').map(s=>s.trim()).filter(Boolean);
     let imgIndex = 0; let interval;
     p.addEventListener('mouseenter', () => {
       const imgEl = p.querySelector('img');
+      if(imgs.length < 2) return;
       interval = setInterval(() => { imgIndex = (imgIndex+1)%imgs.length; imgEl.src = imgs[imgIndex]; }, 1500);
     });
     p.addEventListener('mouseleave', () => {
-      clearInterval(interval); const imgEl = p.querySelector('img'); imgEl.src = imgs[0]; imgIndex = 0;
+      const imgEl = p.querySelector('img');
+      clearInterval(interval); imgEl.src = imgs[0]; imgIndex = 0;
     });
   });
 
@@ -376,13 +412,60 @@ window.addEventListener('load', () => {
   window.addEventListener('scroll', () => {
     const scroll = window.scrollY; const color = Math.min(scroll/800,1)*255; document.body.style.backgroundColor = `rgb(${color},${color},${color})`;
   });
+
+  /* ====== Lightbox (en esta misma página) ====== */
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbPrev = document.getElementById('lb-prev');
+  const lbNext = document.getElementById('lb-next');
+  const lbClose = document.getElementById('lb-close');
+  const lbLink = document.getElementById('lb-link');
+
+  let currentImages = [];
+  let photoIndex = 0;
+
+  function openLB(imagesArray, projectHref, start = 0){
+    currentImages = imagesArray;
+    photoIndex = start;
+    lbImg.src = currentImages[photoIndex];
+    lbLink.href = projectHref || '#';
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden'; // bloquea scroll de fondo
+  }
+  function closeLB(){
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden','true');
+    lbImg.src = '';
+    document.body.style.overflow = ''; // restaura scroll
+  }
+  function navLB(dir){
+    if(!currentImages.length) return;
+    photoIndex = (photoIndex + dir + currentImages.length) % currentImages.length;
+    lbImg.src = currentImages[photoIndex];
+  }
+
+  // Click en tarjetas: abrir visor (y NO navegar)
+  document.querySelector('.projects-grid').addEventListener('click', (e)=>{
+    const card = e.target.closest('.project');
+    if(!card) return;
+    const imgs = (card.dataset.images||'').split(',').map(s=>s.trim()).filter(Boolean);
+    const href = card.dataset.link || '#';
+    if(imgs.length){ openLB(imgs, href, 0); }
+  });
+
+  // Controles visor
+  lbPrev.addEventListener('click', ()=> navLB(-1));
+  lbNext.addEventListener('click', ()=> navLB(1));
+  lbClose.addEventListener('click', closeLB);
+  lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLB(); });
+  window.addEventListener('keydown', (e)=>{
+    if(!lb.classList.contains('open')) return;
+    if(e.key === 'Escape') closeLB();
+    if(e.key === 'ArrowLeft') navLB(-1);
+    if(e.key === 'ArrowRight') navLB(1);
+  });
 });
 </script>
 </body>
 </html>
-
-
-
-
-
-
