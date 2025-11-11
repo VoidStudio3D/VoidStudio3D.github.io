@@ -2,238 +2,209 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Proyecto Feria - Void Studio 3D</title>
-
-<!-- Fuente limpia y moderna -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Proyecto Feria – Void Studio 3D</title>
 <style>
   :root{
-    --bg:#0a0a0a;           /* fondo principal */
-    --panel:#121212;        /* paneles */
-    --panel-2:#171717;      /* paneles secundarios */
-    --txt:#eaeaea;          /* texto principal */
-    --muted:#a3a3a3;        /* texto secundario */
-    --brand:#00e6b8;        /* acento */
-    --brand-2:#4df7d6;      /* acento suave */
-    --border:#262626;       /* bordes sutiles */
-    --radius:14px;
-    --shadow:0 10px 30px rgba(0,0,0,.45);
+    --logo-width: 200px;
+    --bg:#0e0e0e;
+    --panel:#0f0f0f;
+    --panel-2:#171717;
+    --txt:#ffffff;
+    --muted:#c8c8c8;
+    --border:rgba(255,255,255,.08);
   }
-
-  *{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100%}
+  *{box-sizing:border-box;margin:0;padding:0}
   body{
-    background:radial-gradient(1200px 800px at 20% -20%, rgba(0,230,184,.08), transparent 60%),
-               radial-gradient(900px 600px at 110% 10%, rgba(77,247,214,.06), transparent 60%),
-               var(--bg);
+    background:var(--bg);
     color:var(--txt);
-    font-family:"Inter",system-ui,Arial,Helvetica,sans-serif;
-    letter-spacing:.1px;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;
   }
+  a{color:inherit;text-decoration:none}
 
-  /* Barra superior */
-  #menu-bar{
-    position:fixed;inset:0 auto auto 0;
-    height:72px;width:100%;
-    backdrop-filter:saturate(140%) blur(8px);
-    background:linear-gradient(180deg, rgba(18,18,18,.85), rgba(18,18,18,.65));
-    border-bottom:1px solid var(--border);
-    display:flex;align-items:center;gap:22px;
-    padding:0 clamp(16px, 6vw, 60px) 0 calc(clamp(16px, 6vw, 60px) + 220px); /* deja aire por el logo */
-    z-index:50;
+  /* ======= Barra superior y logo (igual al resto del sitio) ======= */
+  .topbar{
+    position:sticky;top:0;left:0;right:0;height:64px;
+    background:#000;display:flex;align-items:center;justify-content:space-between;
+    padding-left:var(--logo-width);z-index:1000;border-bottom:1px solid var(--border)
   }
-  #menu-bar a{
-    color:var(--txt);text-decoration:none;
-    font-weight:600;font-size:.98rem;
-    opacity:.9;transition:opacity .2s, transform .15s;
-    white-space:nowrap;
+  .logo-wrap{
+    position:fixed;top:10px;left:14px;z-index:1001;background:#000;border-radius:10px;
+    padding:6px 10px;box-shadow:0 4px 14px rgba(0,0,0,.35)
   }
-  #menu-bar a:hover{opacity:1; transform:translateY(-1px)}
-  #menu-bar a:active{transform:translateY(0)}
+  .logo{font-weight:800;letter-spacing:.5px;font-size:1.05rem;white-space:nowrap}
 
-  /* Logo */
-  #logo{
-    position:fixed;top:18px;left:clamp(16px, 6vw, 60px);
-    text-decoration:none;z-index:60;
-    font-weight:800;letter-spacing:.3px;
-    font-size:1.35rem;line-height:1;
-    color:var(--txt);
+  .nav{overflow-x:auto;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .nav::-webkit-scrollbar{display:none}
+  .tab{
+    display:inline-block;color:#ddd;margin:0 10px;padding:8px 10px;border-radius:8px;transition:.2s
   }
-  #logo span{
-    display:inline-block;
-    padding:.42rem .72rem;
-    border-radius:999px;
-    background:linear-gradient(90deg, var(--brand), var(--brand-2));
-    color:#0b0b0b;
-    margin-right:.55rem;
-  }
+  .tab:hover{transform:scale(1.06);background:rgba(255,255,255,.06);color:#fff}
 
-  /* CAROUSEL */
+  .social{position:relative;flex:0 0 auto;padding:0 10px}
+  .burger{background:none;border:none;width:28px;height:20px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer}
+  .burger span{display:block;height:3px;background:#fff;border-radius:2px}
+  .dropdown{
+    position:absolute;right:10px;top:48px;background:#111;border:1px solid var(--border);
+    border-radius:10px;display:none;min-width:180px;overflow:hidden
+  }
+  .dropdown a{display:flex;gap:10px;align-items:center;padding:10px 12px;color:#fff}
+  .dropdown a:hover{background:#1a1a1a}
+  .dropdown img{width:18px;height:18px;filter:grayscale(100%)}
+
+  /* ======= Carrusel (imagen completa, sin recortar) ======= */
   .carousel-wrap{
-    position:relative;width:100%;
-    height:calc(100vh - 72px);
-    margin-top:72px; /* espacio para la barra */
-    overflow:hidden;background:#000;border-bottom:1px solid var(--border);
+    position:relative;width:100%;height:calc(100vh - 64px);
+    margin-top:0; /* ya está la topbar sticky */
+    background:#000;border-bottom:1px solid var(--border);overflow:hidden
   }
   .carousel{position:relative;width:100%;height:100%}
-
   .carousel img{
     position:absolute;inset:0;width:100%;height:100%;
-    object-fit:contain;          /* ¡mostrar imagen completa! */
-    background:#000;             /* bandas si la proporción no coincide */
-    opacity:0;transition:opacity 800ms ease;
-    display:block;
+    object-fit:contain;     /* mostrar imagen completa */
+    background:#000;        /* bandas negras si la proporción no coincide */
+    opacity:0;transition:opacity .8s ease;display:block
   }
   .carousel img.active{opacity:1}
 
-  /* Flechas */
   .arrow{
     position:absolute;top:50%;transform:translateY(-50%);
-    width:54px;height:54px;border-radius:12px;border:1px solid var(--border);
-    background:rgba(17,17,17,.6);
-    color:#fff;display:flex;align-items:center;justify-content:center;
-    font-size:26px;cursor:pointer;z-index:70;
-    box-shadow:var(--shadow);
-    transition:background .2s, transform .12s, border-color .2s;
-    user-select:none;
+    width:52px;height:52px;border-radius:12px;border:1px solid var(--border);
+    background:rgba(17,17,17,.7);color:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:26px;cursor:pointer;z-index:70;transition:background .2s, transform .12s, border-color .2s
   }
-  .arrow:hover{ background:rgba(23,23,23,.9); border-color:#2e2e2e; transform:translateY(-50%) scale(1.04) }
-  .arrow:active{ transform:translateY(-50%) scale(.98) }
-  .arrow.left{ left:20px }
-  .arrow.right{ right:20px }
+  .arrow:hover{background:rgba(23,23,23,.92);border-color:rgba(255,255,255,.16);transform:translateY(-50%) scale(1.04)}
+  .arrow:active{transform:translateY(-50%) scale(.98)}
+  .arrow.left{left:18px}
+  .arrow.right{right:18px}
 
-  /* Dots */
   .dots{
     position:absolute;left:50%;bottom:18px;transform:translateX(-50%);
     display:flex;gap:10px;z-index:70;padding:8px 10px;border-radius:999px;
-    background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.06);
-    backdrop-filter:blur(6px);
+    background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.06);backdrop-filter:blur(6px)
   }
   .dot{
-    width:12px;height:12px;border-radius:50%;
-    background:transparent;border:2px solid rgba(255,255,255,.35);
-    cursor:pointer;transition:transform .12s, border-color .2s, background .2s;
+    width:12px;height:12px;border-radius:50%;background:transparent;border:2px solid rgba(255,255,255,.35);
+    cursor:pointer;transition:transform .12s, border-color .2s, background .2s
   }
-  .dot:hover{ transform:scale(1.12) }
-  .dot.active{ background:linear-gradient(90deg, var(--brand), var(--brand-2)); border-color:transparent }
+  .dot:hover{transform:scale(1.12)}
+  .dot.active{background:#fff;border-color:#fff}
 
-  /* Contenido */
+  /* ======= Contenido ======= */
   .section{
-    width:min(1100px, 86%);
-    margin:42px auto;
-    padding:28px;
-    background:linear-gradient(180deg, rgba(18,18,18,.9), rgba(18,18,18,.7));
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow);
-    opacity:0; transform:translateY(22px);
-    transition:all .6s ease;
+    max-width:1200px;margin:34px auto;padding:0 16px
   }
-  .section.visible{ opacity:1; transform:translateY(0) }
-  .section h2{
-    font-size:clamp(1.4rem, 2.2vw, 2rem);
-    margin-bottom:.6rem; font-weight:800; letter-spacing:.2px;
-    background:linear-gradient(90deg, #fff, #d8d8d8 60%, #9f9f9f);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
+  .card-panel{
+    background:linear-gradient(180deg,rgba(18,18,18,.95),rgba(18,18,18,.85));
+    border:1px solid var(--border);border-radius:14px;padding:24px 22px
   }
-  .section p{
-    color:var(--muted);font-size:1.05rem;line-height:1.75;
-  }
+  .section h1,.section h2{font-weight:800;letter-spacing:.2px}
+  .section h1{font-size:2rem;margin-bottom:10px}
+  .section h2{font-size:1.4rem;margin-bottom:6px}
+  .section p{color:var(--muted);line-height:1.75;font-size:1.05rem}
 
-  /* Tarjeta de contacto */
-  #contacto{
-    text-align:center;
-    background:linear-gradient(180deg, rgba(20,20,20,.95), rgba(20,20,20,.85));
-  }
-  #contacto a{
-    color:#fff;text-decoration:none;font-weight:700;
-    border-bottom:1px dashed rgba(255,255,255,.18);
-  }
-  #contacto a:hover{ border-bottom-color:transparent }
+  /* ======= Contacto ======= */
   #contacto .cta{
-    display:inline-flex;align-items:center;gap:.6rem;
-    margin-top:18px;padding:12px 18px;border-radius:12px;
-    background:linear-gradient(90deg, var(--brand), var(--brand-2));
-    color:#0b0b0b;font-weight:800;
-    box-shadow:var(--shadow);border:none;cursor:pointer;
-    transition:transform .14s ease;
+    display:inline-flex;align-items:center;gap:.6rem;margin-top:14px;
+    padding:12px 16px;border-radius:12px;background:#fff;color:#000;font-weight:800;border:1px solid #fff;
+    transition:transform .14s ease, opacity .2s
   }
-  #contacto .cta:active{ transform:translateY(1px) }
+  #contacto .cta:hover{opacity:.9}
+  #contacto .cta:active{transform:translateY(1px)}
+  #contacto a{border-bottom:1px dashed rgba(255,255,255,.18)}
+  #contacto a:hover{border-bottom-color:transparent}
 
-  /* Responsive */
-  @media (max-width:900px){
-    #menu-bar{ padding:0 16px 0 calc(16px + 160px); gap:14px; height:66px }
-    #logo{ top:14px }
-    .carousel-wrap{ height:calc(100vh - 66px); margin-top:66px }
-    .arrow{ width:46px; height:46px; font-size:22px }
-    .dots{ bottom:14px }
-    .section{ padding:22px }
-  }
-  @media (max-width:640px){
-    #menu-bar a{ font-size:.92rem }
-    #logo{ font-size:1.1rem }
+  /* ======= Footer ======= */
+  footer{max-width:1200px;margin:20px auto 60px;padding:0 16px;color:#bdbdbd;font-size:.9rem}
+
+  /* ======= Responsive ======= */
+  @media(max-width:900px){
+    .topbar{height:64px;padding-left:120px}
+    .logo{font-size:.95rem}
+    .carousel-wrap{height:calc(100vh - 64px)}
+    .arrow{width:46px;height:46px;font-size:22px}
   }
 </style>
 </head>
 <body>
 
-<!-- Logo y menú -->
-<a id="logo" href="index.html"><span>VS</span>Void Studio 3D</a>
-<nav id="menu-bar" aria-label="Navegación principal">
-  <a href="interiores.html">Interiores</a>
-  <a href="stands.html">Stands</a>
-  <a href="comerciales.html">Comerciales</a>
-  <a href="eventos.html">Eventos</a>
-  <a href="mobiliario.html">Mobiliario</a>
-  <a href="automotriz.html">Automotriz</a>
-</nav>
+  <!-- ===== Logo fijo y Topbar (mismo de todo el sitio) ===== -->
+  <div class="logo-wrap"><a class="logo" href="index.html">Void Studio 3D</a></div>
+  <header class="topbar">
+    <nav class="nav" id="nav">
+      <a class="tab" href="interiores.html">Diseño de interiores</a>
+      <a class="tab" href="stands.html">Diseño de stands</a>
+      <a class="tab" href="comerciales.html">Espacios comerciales</a>
+      <a class="tab" href="eventos.html">Eventos y activaciones</a>
+      <a class="tab" href="mobiliario.html">Diseño mobiliario</a>
+      <a class="tab" href="automotriz.html">Diseño automotriz</a>
+      <a class="tab" href="proyectos.html">Proyectos</a>
+    </nav>
+    <div class="social">
+      <button class="burger" id="burger" aria-label="Abrir redes"><span></span><span></span><span></span></button>
+      <div class="dropdown" id="dropdown">
+        <a href="https://instagram.com/voidstudio3d" target="_blank" rel="noopener"><img src="https://img.icons8.com/ios-glyphs/30/ffffff/instagram-new.png" alt="Instagram"/>Instagram</a>
+        <a href="https://facebook.com" target="_blank" rel="noopener"><img src="https://img.icons8.com/ios-glyphs/30/ffffff/facebook-new.png" alt="Facebook"/>Facebook</a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener"><img src="https://img.icons8.com/ios-glyphs/30/ffffff/linkedin.png" alt="LinkedIn"/>LinkedIn</a>
+        <a href="https://workana.com" target="_blank" rel="noopener"><img src="https://img.icons8.com/ios-glyphs/30/ffffff/workana.png" alt="Workana"/>Workana</a>
+      </div>
+    </div>
+  </header>
 
-<!-- Carrusel -->
-<section class="carousel-wrap" id="carouselWrap" aria-label="Galería de proyectos">
-  <div class="carousel" id="carousel">
-    <img src="cafeteria.jpg" alt="Stand de cafetería en feria" class="active">
-    <img src="https://picsum.photos/1600/900?21" alt="Render 2 del stand">
-    <img src="https://picsum.photos/1600/900?22" alt="Render 3 del stand">
-    <img src="https://picsum.photos/1600/900?23" alt="Render 4 del stand">
-  </div>
+  <!-- ===== Carrusel ===== -->
+  <section class="carousel-wrap" id="carouselWrap" aria-label="Galería de Proyecto Feria">
+    <div class="carousel" id="carousel">
+      <!-- Reemplazá/añadí tus imágenes -->
+      <img src="cafeteria.jpg" alt="Stand de cafetería en feria" class="active">
+      <img src="https://picsum.photos/1600/900?21" alt="Render 2 del stand">
+      <img src="https://picsum.photos/1600/900?22" alt="Render 3 del stand">
+      <img src="https://picsum.photos/1600/900?23" alt="Render 4 del stand">
+    </div>
 
-  <button class="arrow left" id="prev" aria-label="Anterior">‹</button>
-  <button class="arrow right" id="next" aria-label="Siguiente">›</button>
-  <div class="dots" id="dots" role="tablist" aria-label="Indicadores"></div>
-</section>
+    <button class="arrow left" id="prev" aria-label="Anterior">‹</button>
+    <button class="arrow right" id="next" aria-label="Siguiente">›</button>
+    <div class="dots" id="dots" role="tablist" aria-label="Indicadores"></div>
+  </section>
 
-<!-- Descripción -->
-<section class="section" id="descripcion">
-  <h2>Proyecto Feria</h2>
-  <p>
-    <strong>Proyecto Feria</strong> es un módulo expositivo pensado para activaciones y ferias.
-    Combina materiales cálidos con una estructura liviana, iluminación focal y circulación clara.
-    El diseño prioriza la visibilidad de marca, la ergonomía de atención y la posibilidad de
-    desmontaje rápido sin perder presencia.
-  </p>
-</section>
+  <!-- ===== Descripción ===== -->
+  <section class="section">
+    <div class="card-panel">
+      <h1>Proyecto Feria</h1>
+      <p>
+        <strong>Proyecto Feria</strong> es un módulo expositivo diseñado para ferias y activaciones.
+        Combina materiales cálidos con estructura liviana, iluminación focal y una circulación clara.
+        Se prioriza la visibilidad de marca, la ergonomía de atención y el desmontaje rápido sin perder presencia.
+      </p>
+    </div>
+  </section>
 
-<!-- Contacto -->
-<section id="contacto" class="section">
-  <h2>¿Hablamos de tu próximo stand?</h2>
-  <p>Email: <a href="mailto:voidstudio3d@gmail.com">voidstudio3d@gmail.com</a></p>
-  <p>Teléfono: <a href="tel:+59170000000">+591 700 00000</a></p>
-  <p>Instagram: <a href="https://instagram.com/voidstudio3d" target="_blank" rel="noopener">@voidstudio3d</a></p>
-  <p>Ubicación: Cochabamba, Bolivia</p>
-  <button class="cta" onclick="window.location.href='mailto:voidstudio3d@gmail.com?subject=Proyecto%20Stand%20-%20Consulta'">Enviar consulta</button>
-</section>
+  <!-- ===== Contacto ===== -->
+  <section class="section" id="contacto">
+    <div class="card-panel" style="text-align:center">
+      <h2>¿Hablamos de tu próximo stand?</h2>
+      <p>Email: <a href="mailto:voidstudio3d@gmail.com">voidstudio3d@gmail.com</a></p>
+      <p>Teléfono: <a href="tel:+59170000000">+591 700 00000</a></p>
+      <p>Instagram: <a href="https://instagram.com/voidstudio3d" target="_blank" rel="noopener">@voidstudio3d</a></p>
+      <p>Ubicación: Cochabamba, Bolivia</p>
+      <button class="cta" onclick="window.location.href='mailto:voidstudio3d@gmail.com?subject=Proyecto%20Stand%20-%20Consulta'">Enviar consulta</button>
+    </div>
+  </section>
+
+  <footer>
+    © <span id="year"></span> Void Studio 3D — Cochabamba, Bolivia · <a href="mailto:voidstudio3d@gmail.com">voidstudio3d@gmail.com</a>
+  </footer>
 
 <script>
-  // Aparición suave de secciones
-  const sections = document.querySelectorAll('.section');
-  const obs = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold:0.18 });
-  sections.forEach(s=>obs.observe(s));
+  // ===== Menú social
+  const burger = document.getElementById('burger');
+  const dropdown = document.getElementById('dropdown');
+  burger.addEventListener('click',()=>{ dropdown.style.display = dropdown.style.display==='block'?'none':'block' });
+  document.addEventListener('click', (e)=>{ if(!burger.contains(e.target) && !dropdown.contains(e.target)) dropdown.style.display='none' });
 
-  // Carousel
+  // ===== Año dinámico
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ===== Carousel
   (function(){
     const carousel = document.getElementById('carousel');
     const slides = Array.from(carousel.querySelectorAll('img'));
@@ -247,7 +218,7 @@
     let timer = null;
     let isHover = false;
 
-    // Dots
+    // Dots accesibles
     slides.forEach((_, i) => {
       const d = document.createElement('button');
       d.className = 'dot' + (i===0 ? ' active' : '');
@@ -264,31 +235,22 @@
       slides[index].classList.add('active');
       dots[index].classList.add('active');
     }
-    function next(){
-      index = (index + 1) % slides.length;
-      update();
-    }
-    function prev(){
-      index = (index - 1 + slides.length) % slides.length;
-      update();
-    }
-    function goTo(i){
-      index = (i + slides.length) % slides.length;
-      update(); resetTimer();
-    }
+    function next(){ index = (index + 1) % slides.length; update(); }
+    function prev(){ index = (index - 1 + slides.length) % slides.length; update(); }
+    function goTo(i){ index = (i + slides.length) % slides.length; update(); resetTimer(); }
 
     nextBtn.addEventListener('click', ()=>{ next(); resetTimer(); });
     prevBtn.addEventListener('click', ()=>{ prev(); resetTimer(); });
     wrap.addEventListener('mouseenter', ()=>{ isHover = true; });
     wrap.addEventListener('mouseleave', ()=>{ isHover = false; });
 
-    // Teclado
+    // teclado
     window.addEventListener('keydown', (e)=>{
       if(e.key==='ArrowLeft'){ prev(); resetTimer(); }
       if(e.key==='ArrowRight'){ next(); resetTimer(); }
     });
 
-    // autoplay con pausa al hover
+    // autoplay
     function startTimer(){
       if(timer) clearInterval(timer);
       timer = setInterval(()=>{ if(!isHover) next(); }, intervalMs);
@@ -299,6 +261,5 @@
     startTimer();
   })();
 </script>
-
 </body>
 </html>
