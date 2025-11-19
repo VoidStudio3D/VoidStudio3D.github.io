@@ -62,8 +62,8 @@
   /* ======= Lightbox ======= */
   .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:2000}
   .lightbox.open{display:flex}
-  .lightbox-inner{position:relative;max-width:92vw;max-height:86vh}
-  .lightbox img{display:block;max-width:92vw;max-height:86vh;object-fit:contain;border-radius:10px}
+  .lightbox-inner{position:relative;max-width:92vw;max-height:86vh;touch-action:pan-y} /* permitir scroll vertical en la página; evitar pan-x por defecto */
+  .lightbox img{display:block;max-width:92vw;max-height:86vh;object-fit:contain;border-radius:10px;user-select:none;-webkit-user-drag:none;transition:transform .25s ease}
   .lb-close,.lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(4px);color:#fff;height:44px;width:44px;border-radius:999px;display:grid;place-items:center;font-size:22px;cursor:pointer}
   .lb-close{top:-54px;right:0;transform:none}
   .lb-prev{left:-56px}
@@ -121,7 +121,7 @@
     </div>
   </section>
 
-  <!-- ===== Grilla ===== -->
+  <!-- ===== Grilla ======= -->
   <section class="grid" id="grid">
     <!-- Tarjeta ejemplo: duplicar y ajustar rutas -->
     <article class="card" data-category="interiores" data-tags="living madera cálido" data-images="images/proyectos/diseñodeinteriores/bass6.jpg,images/proyectos/diseñodeinteriores/ch.jpg,images/proyectos/diseñodeinteriores/reint3.png,images/proyectos/diseñodeinteriores/sal.png,images/proyectos/diseñodeinteriores/reint.png,images/proyectos/diseñodeinteriores/reu.png,images/proyectos/diseñodeinteriores/fr.png,images/proyectos/diseñodeinteriores/grad.png,images/proyectos/diseñodeinteriores/coc.png,images/proyectos/diseñodeinteriores/re4.png">
@@ -199,7 +199,7 @@
 
   <!-- ===== Lightbox ===== -->
   <div class="lightbox" id="lightbox" aria-hidden="true">
-    <div class="lightbox-inner">
+    <div class="lightbox-inner" id="lightboxInner">
       <button class="lb-close" id="lbClose" aria-label="Cerrar">✕</button>
       <button class="lb-prev" id="lbPrev" aria-label="Anterior">‹</button>
       <img id="lbImg" src="" alt="Proyecto"/>
@@ -260,11 +260,36 @@ const lbImg = document.getElementById('lbImg');
 const lbPrev = document.getElementById('lbPrev');
 const lbNext = document.getElementById('lbNext');
 const lbClose = document.getElementById('lbClose');
+const lbInner = document.getElementById('lightboxInner');
+
 let currentImages = []; let photoIndex = 0;
 
-function openLB(imgs, start=0){ currentImages = imgs; photoIndex = start; lbImg.src = currentImages[photoIndex]; lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); }
+function setImgSrc(index, instant=false){
+  photoIndex = (index + currentImages.length) % currentImages.length;
+  lbImg.style.transition = instant ? 'none' : '';
+  lbImg.style.transform = 'translateX(0)'; // reset transform
+  lbImg.src = currentImages[photoIndex];
+}
+
+function openLB(imgs, start=0){
+  currentImages = imgs;
+  setImgSrc(start, true);
+  lb.classList.add('open');
+  lb.setAttribute('aria-hidden','false');
+}
 function closeLB(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); lbImg.src=''; }
-function navLB(dir){ photoIndex = (photoIndex + dir + currentImages.length) % currentImages.length; lbImg.src = currentImages[photoIndex]; }
+function navLB(dir){
+  // animación: desliza la imagen hacia la dirección, luego cambia
+  const dirX = dir > 0 ? -1 : 1; // si vamos next, la imagen sale a la izquierda
+  lbImg.style.transition = 'transform .18s ease';
+  lbImg.style.transform = `translateX(${dirX * 40}vw)`;
+  setTimeout(()=>{
+    setImgSrc(photoIndex + dir, true);
+    // pequeño "from" para que parezca continuidad
+    lbImg.style.transform = `translateX(${ -dirX * 10 }vw)`;
+    requestAnimationFrame(()=>{ lbImg.style.transition = 'transform .18s ease'; lbImg.style.transform = 'translateX(0)'; });
+  }, 160);
+}
 
 grid.addEventListener('click', (e)=>{
   const card = e.target.closest('.card');
@@ -278,6 +303,66 @@ lbNext.addEventListener('click', ()=> navLB(1));
 lbClose.addEventListener('click', closeLB);
 lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLB(); })
 window.addEventListener('keydown', (e)=>{ if(lb.classList.contains('open')){ if(e.key==='Escape') closeLB(); if(e.key==='ArrowLeft') navLB(-1); if(e.key==='ArrowRight') navLB(1); } })
+
+// ===== Swipe / Drag en lightbox (touch + mouse)
+let isDragging = false;
+let startX = 0;
+let currentX = 0;
+const THRESHOLD = 60; // px para considerar swipe
+
+function onDragStart(clientX){
+  isDragging = true;
+  startX = clientX;
+  currentX = clientX;
+  lbImg.style.transition = 'none';
+}
+function onDragMove(clientX){
+  if(!isDragging) return;
+  currentX = clientX;
+  const delta = currentX - startX;
+  // mueve imagen horizontalmente; limitar un poco para evitar que se salga mucho
+  lbImg.style.transform = `translateX(${delta}px)`;
+}
+function onDragEnd(){
+  if(!isDragging) return;
+  isDragging = false;
+  const delta = currentX - startX;
+  lbImg.style.transition = 'transform .18s ease';
+  if(Math.abs(delta) > THRESHOLD){
+    // swipe!
+    if(delta < 0){
+      // swipe left -> next
+      lbImg.style.transform = `translateX(-100vw)`;
+      setTimeout(()=> navLB(1), 100);
+    } else {
+      // swipe right -> prev
+      lbImg.style.transform = `translateX(100vw)`;
+      setTimeout(()=> navLB(-1), 100);
+    }
+  } else {
+    // volver al centro
+    lbImg.style.transform = 'translateX(0)';
+  }
+}
+
+// touch events
+lbImg.addEventListener('touchstart', (ev)=>{ if(ev.touches && ev.touches[0]) onDragStart(ev.touches[0].clientX); }, {passive:true});
+lbImg.addEventListener('touchmove', (ev)=>{ if(ev.touches && ev.touches[0]) onDragMove(ev.touches[0].clientX); }, {passive:true});
+lbImg.addEventListener('touchend', (ev)=>{ onDragEnd(); }, {passive:true});
+
+// mouse events (desktop drag)
+lbImg.addEventListener('mousedown', (ev)=>{
+  ev.preventDefault();
+  onDragStart(ev.clientX);
+  // add listeners to document to catch moves outside image
+  function mm(e){ onDragMove(e.clientX); }
+  function mu(e){ onDragEnd(); document.removeEventListener('mousemove', mm); document.removeEventListener('mouseup', mu); }
+  document.addEventListener('mousemove', mm);
+  document.addEventListener('mouseup', mu);
+});
+
+// evitar comportamiento por defecto de arrastrar imagen
+lbImg.addEventListener('dragstart', (e)=> e.preventDefault());
 
 // ===== Año dinámico
 document.getElementById('year').textContent = new Date().getFullYear();
