@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Proyectos – Void Studio 3D</title>
 <style>
-  :root{ --logo-width: 200px; --accent:#ffffff; --bg:#0e0e0e; }
+  :root{ --logo-width: 200px; --accent:#ffffff; --bg:#0e0e0e; --gap:20px; --peek:40px; }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;}
   a{color:inherit;text-decoration:none}
@@ -59,16 +59,71 @@
   .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
   .tag{font-size:.75rem;background:#1a1a1a;border:1px solid rgba(255,255,255,.1);padding:4px 8px;border-radius:999px;color:#ddd}
 
-  /* ======= Lightbox ======= */
-  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:2000}
+  /* ======= Lightbox (instagram-like with peek + dots) ======= */
+  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:2000;padding:20px}
   .lightbox.open{display:flex}
-  .lightbox-inner{position:relative;max-width:92vw;max-height:86vh;touch-action:pan-y} /* permitir scroll vertical en la página; evitar pan-x por defecto */
-  .lightbox img{display:block;max-width:92vw;max-height:86vh;object-fit:contain;border-radius:10px;user-select:none;-webkit-user-drag:none;transition:transform .25s ease}
-  .lb-close,.lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(4px);color:#fff;height:44px;width:44px;border-radius:999px;display:grid;place-items:center;font-size:22px;cursor:pointer}
-  .lb-close{top:-54px;right:0;transform:none}
-  .lb-prev{left:-56px}
-  .lb-next{right:-56px}
-  @media(max-width:768px){.lb-prev{left:6px}.lb-next{right:6px}.lb-close{right:6px;top:6px}}
+  .lightbox-inner{
+    position:relative;
+    width:min(1100px,92vw);
+    height:min(80vh,760px);
+    max-height:86vh;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    align-items:center;
+    justify-content:center;
+    touch-action:pan-y; /* allow vertical page scroll outside track */
+  }
+
+  /* track shows slides with a "peek" of neighbors */
+  .lb-viewport{
+    width:100%;
+    flex:1 1 auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .lb-track{
+    display:flex;
+    gap:var(--gap);
+    transition:transform .18s ease;
+    will-change:transform;
+    align-items:center;
+    padding:0; margin:0;
+  }
+  .lb-slide{
+    flex:0 0 calc(100% - (var(--peek) * 2)); /* width leaving peek on both sides */
+    max-width:calc(100% - (var(--peek) * 2));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .lb-slide img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:10px;
+    user-select:none;
+    -webkit-user-drag:none;
+    pointer-events:none;
+  }
+
+  /* controls */
+  .lb-close,.lb-prev,.lb-next{
+    position:absolute;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(4px);color:#fff;height:44px;width:44px;border-radius:999px;display:grid;place-items:center;font-size:22px;cursor:pointer;z-index:5;
+  }
+  .lb-close{top:12px;right:12px}
+  .lb-prev{left:12px;top:50%;transform:translateY(-50%)}
+  .lb-next{right:12px;top:50%;transform:translateY(-50%)}
+  @media(max-width:768px){ .lb-prev{left:8px} .lb-next{right:8px} .lb-close{right:8px;top:8px} }
+
+  /* dots */
+  .lb-dots{display:flex;gap:8px;align-items:center;justify-content:center;padding:6px 0}
+  .lb-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.18);cursor:pointer;border:1px solid rgba(255,255,255,.05)}
+  .lb-dot.active{background:#fff;width:28px;height:8px;border-radius:8px;transition:width .18s}
+
+  /* small caption area (optional) */
+  .lb-caption{color:#c8c8c8;font-size:.95rem;max-width:920px;text-align:center;padding:4px 10px}
+  @media(max-width:520px){ .lb-caption{font-size:.85rem} }
 
   /* Footer sutil */
   footer{max-width:1200px;margin:20px auto 60px;padding:0 16px;color:#bdbdbd;font-size:.9rem}
@@ -136,10 +191,10 @@
       </div>
     </article>
 
-    <article class="card" data-category="stands" data-tags="feria modular branding" data-images=",images/proyectos/diseñodeinteriores/TIGBIBL8.png,images/proyectos/diseñodeinteriores/TIGBIBL6.png,images/proyectos/diseñodeinteriores/TIGBIBL9.png,images/proyectos/diseñodeinteriores/TIGBIBL1.png,images/proyectos/diseñodeinteriores/TIGBIBL7.png,images/proyectos/diseñodeinteriores/TIGBIBL2.png">
+    <article class="card" data-category="stands" data-tags="feria modular branding" data-images="images/proyectos/diseñodeinteriores/TIGBIBL8.png,images/proyectos/diseñodeinteriores/TIGBIBL6.png,images/proyectos/diseñodeinteriores/TIGBIBL9.png,images/proyectos/diseñodeinteriores/TIGBIBL1.png,images/proyectos/diseñodeinteriores/TIGBIBL7.png,images/proyectos/diseñodeinteriores/TIGBIBL2.png">
       <div class="thumb">
         <img class="main" src="images/proyectos/diseñodeinteriores/TIGBIBL8.png" alt="Proyecto 2" loading="lazy"/>
-        <img class="alt"  src="images/proyectos//diseñodeinteriores/TIGBIBL9.png" alt="Proyecto 2 alt" loading="lazy"/>
+        <img class="alt"  src="images/proyectos/diseñodeinteriores/TIGBIBL9.png" alt="Proyecto 2 alt" loading="lazy"/>
       </div>
       <div class="meta">
         <h3>Biblioteca</h3>
@@ -148,7 +203,7 @@
       </div>
     </article>
 
-    <article class="card" data-category="comercial" data-tags="retail vitrina iluminación" data-images="images/proyectos//diseñodeinteriores/TIGSC3.png,images/proyectos//diseñodeinteriores/TIGSC5.png,images/proyectos/diseñodeinteriores/TIGSC1.png,images/proyectos//diseñodeinteriores/TIGSC4.png,images/proyectos//diseñodeinteriores/TIGSC2.png">
+    <article class="card" data-category="comercial" data-tags="retail vitrina iluminación" data-images="images/proyectos/diseñodeinteriores/TIGSC3.png,images/proyectos/diseñodeinteriores/TIGSC5.png,images/proyectos/diseñodeinteriores/TIGSC1.png,images/proyectos/diseñodeinteriores/TIGSC4.png,images/proyectos/diseñodeinteriores/TIGSC2.png">
       <div class="thumb">
         <img class="main" src="images/proyectos/diseñodeinteriores/TIGSC3.png" alt="Proyecto 3" loading="lazy"/>
         <img class="alt"  src="images/proyectos/diseñodeinteriores/TIGSC5.png" alt="Proyecto 3 alt" loading="lazy"/>
@@ -172,7 +227,7 @@
       </div>
     </article>
 
-    <article class="card" data-category="mobiliario" data-tags="madera diseño a medida" data-images="images/proyectos/diseñodeinteriores/TIGTIQ25.png, images/proyectos/diseñodeinteriores/TIGTIQ4.png,images/proyectos/diseñodeinteriores/TIGTIQ10.png, images/proyectos/diseñodeinteriores/TIGTIQ14.png">
+    <article class="card" data-category="mobiliario" data-tags="madera diseño a medida" data-images="images/proyectos/diseñodeinteriores/TIGTIQ25.png,images/proyectos/diseñodeinteriores/TIGTIQ4.png,images/proyectos/diseñodeinteriores/TIGTIQ10.png,images/proyectos/diseñodeinteriores/TIGTIQ14.png">
       <div class="thumb">
         <img class="main" src="images/proyectos/diseñodeinteriores/TIGTIQ28.png" alt="Proyecto 5" loading="lazy"/>
         <img class="alt"  src="images/proyectos/diseñodeinteriores/TIGTIQ16.png" alt="Proyecto 5 alt" loading="lazy"/>
@@ -184,7 +239,7 @@
       </div>
     </article>
 
-    <article class="card" data-category="automotriz" data-tags="detailing custom" data-images="images/proyectos/proyecto-06-01.jpg,images/proyectos/proyecto-06-02.jpg, images/proyectos/coc2.jpeg, images/proyectos/coc1.jpeg, images/proyectos/coc3.jpg">
+    <article class="card" data-category="automotriz" data-tags="detailing custom" data-images="images/proyectos/proyecto-06-01.jpg,images/proyectos/proyecto-06-02.jpg,images/proyectos/coc2.jpeg,images/proyectos/coc1.jpeg,images/proyectos/coc3.jpg">
       <div class="thumb">
         <img class="main" src="images/proyectos/proyecto-06-01.jpg" alt="Proyecto 6" loading="lazy"/>
         <img class="alt"  src="images/proyectos/proyecto-06-02.jpg" alt="Proyecto 6 alt" loading="lazy"/>
@@ -202,8 +257,13 @@
     <div class="lightbox-inner" id="lightboxInner">
       <button class="lb-close" id="lbClose" aria-label="Cerrar">✕</button>
       <button class="lb-prev" id="lbPrev" aria-label="Anterior">‹</button>
-      <img id="lbImg" src="" alt="Proyecto"/>
+      <div class="lb-viewport" id="lbViewport">
+        <div class="lb-track" id="lbTrack"><!-- slides se inyectan aquí --></div>
+      </div>
       <button class="lb-next" id="lbNext" aria-label="Siguiente">›</button>
+
+      <div class="lb-dots" id="lbDots" aria-hidden="false"><!-- dots generados aquí --></div>
+      <div class="lb-caption" id="lbCaption" aria-hidden="true"></div>
     </div>
   </div>
 
@@ -246,126 +306,194 @@ chips.addEventListener('click', (e)=>{
 })
 search.addEventListener('input', applyFilters);
 
-// ===== Hover: alternar imagen
+// ===== Hover: alternar imagen (preload)
 [...grid.querySelectorAll('.card')].forEach(card=>{
-  const main = card.querySelector('img.main');
   const alt = card.querySelector('img.alt');
-  // ya se maneja con CSS; aseguramos preload de alt
-  const preload = new Image(); preload.src = alt.src;
+  if(alt){
+    const preload = new Image(); preload.src = alt.src;
+  }
 })
 
-// ===== Lightbox básico (usa data-images)
-const lb = document.getElementById('lightbox');
-const lbImg = document.getElementById('lbImg');
-const lbPrev = document.getElementById('lbPrev');
-const lbNext = document.getElementById('lbNext');
-const lbClose = document.getElementById('lbClose');
+// ===== Lightbox con track (peek) + dots
+const lightbox = document.getElementById('lightbox');
 const lbInner = document.getElementById('lightboxInner');
+const lbTrack = document.getElementById('lbTrack');
+const lbViewport = document.getElementById('lbViewport');
+const lbDots = document.getElementById('lbDots');
+const lbCaption = document.getElementById('lbCaption');
+const btnPrev = document.getElementById('lbPrev');
+const btnNext = document.getElementById('lbNext');
+const btnClose = document.getElementById('lbClose');
 
-let currentImages = []; let photoIndex = 0;
-
-function setImgSrc(index, instant=false){
-  photoIndex = (index + currentImages.length) % currentImages.length;
-  lbImg.style.transition = instant ? 'none' : '';
-  lbImg.style.transform = 'translateX(0)'; // reset transform
-  lbImg.src = currentImages[photoIndex];
-}
-
-function openLB(imgs, start=0){
-  currentImages = imgs;
-  setImgSrc(start, true);
-  lb.classList.add('open');
-  lb.setAttribute('aria-hidden','false');
-}
-function closeLB(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); lbImg.src=''; }
-function navLB(dir){
-  // animación: desliza la imagen hacia la dirección, luego cambia
-  const dirX = dir > 0 ? -1 : 1; // si vamos next, la imagen sale a la izquierda
-  lbImg.style.transition = 'transform .18s ease';
-  lbImg.style.transform = `translateX(${dirX * 40}vw)`;
-  setTimeout(()=>{
-    setImgSrc(photoIndex + dir, true);
-    // pequeño "from" para que parezca continuidad
-    lbImg.style.transform = `translateX(${ -dirX * 10 }vw)`;
-    requestAnimationFrame(()=>{ lbImg.style.transition = 'transform .18s ease'; lbImg.style.transform = 'translateX(0)'; });
-  }, 160);
-}
-
-grid.addEventListener('click', (e)=>{
-  const card = e.target.closest('.card');
-  if(!card) return;
-  const imgs = (card.dataset.images||'').split(',').map(s=>s.trim()).filter(Boolean);
-  if(imgs.length) openLB(imgs, 0);
-})
-
-lbPrev.addEventListener('click', ()=> navLB(-1));
-lbNext.addEventListener('click', ()=> navLB(1));
-lbClose.addEventListener('click', closeLB);
-lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLB(); })
-window.addEventListener('keydown', (e)=>{ if(lb.classList.contains('open')){ if(e.key==='Escape') closeLB(); if(e.key==='ArrowLeft') navLB(-1); if(e.key==='ArrowRight') navLB(1); } })
-
-// ===== Swipe / Drag en lightbox (touch + mouse)
+let images = [];
+let index = 0;
+let slideWidth = 0;
+let gap = 20;
 let isDragging = false;
 let startX = 0;
 let currentX = 0;
-const THRESHOLD = 60; // px para considerar swipe
+const THRESHOLD = 60; // px
 
-function onDragStart(clientX){
+function buildTrack(imgs){
+  images = imgs.slice();
+  lbTrack.innerHTML = '';
+  lbDots.innerHTML = '';
+  // crear slides
+  images.forEach((src, i)=>{
+    const slide = document.createElement('div'); slide.className = 'lb-slide';
+    const img = document.createElement('img'); img.src = src; img.alt = `Imagen ${i+1}`;
+    slide.appendChild(img);
+    lbTrack.appendChild(slide);
+
+    // dot
+    const d = document.createElement('button'); d.className = 'lb-dot'; d.dataset.index = i;
+    d.addEventListener('click', ()=> goTo(parseInt(d.dataset.index,10)));
+    lbDots.appendChild(d);
+  });
+  updateSizes();
+  setTimeout(()=> goTo(0, true), 20); // inicializar
+}
+
+function updateSizes(){
+  // calcular ancho de slide (incl. gap) en px
+  gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--gap')) || 20;
+  const slideEl = lbTrack.querySelector('.lb-slide');
+  if(!slideEl) { slideWidth = 0; return; }
+  // fuerza reflow para tener los tamaños correctos
+  slideWidth = slideEl.getBoundingClientRect().width + gap;
+}
+
+function setTransform(x){
+  lbTrack.style.transform = `translateX(${x}px)`;
+}
+
+function goTo(i, instant=false){
+  if(images.length===0) return;
+  index = (i + images.length) % images.length;
+  updateSizes();
+  const viewportRect = lbViewport.getBoundingClientRect();
+  // queremos centrar la slide index en el viewport: transform = -(slideWidth * index)
+  const tx = - (slideWidth * index);
+  if(instant){
+    lbTrack.style.transition = 'none';
+    setTransform(tx);
+    requestAnimationFrame(()=> lbTrack.style.transition = '');
+  } else {
+    lbTrack.style.transition = 'transform .18s ease';
+    setTransform(tx);
+  }
+  updateDots();
+  updateCaption();
+}
+
+function updateDots(){
+  [...lbDots.children].forEach((d, i)=> d.classList.toggle('active', i===index));
+}
+
+function updateCaption(){
+  // si querés usar captions, podés sacar data-caption de la tarjeta; por ahora dejamos vacío
+  lbCaption.textContent = '';
+  lbCaption.style.display = images[index] ? 'block' : 'none';
+}
+
+function openLightboxFromCard(card){
+  const imgs = (card.dataset.images || '').split(',').map(s=>s.trim()).filter(Boolean);
+  if(!imgs.length) return;
+  buildTrack(imgs);
+  lightbox.classList.add('open');
+  lightbox.setAttribute('aria-hidden','false');
+}
+
+// eventos para abrir lightbox
+grid.addEventListener('click', (e)=>{
+  const card = e.target.closest('.card');
+  if(!card) return;
+  openLightboxFromCard(card);
+});
+
+// control prev/next/close
+btnPrev.addEventListener('click', ()=> goTo(index - 1));
+btnNext.addEventListener('click', ()=> goTo(index + 1));
+btnClose.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', (e)=> { if(e.target === lightbox) closeLightbox(); });
+window.addEventListener('keydown', (e)=> {
+  if(!lightbox.classList.contains('open')) return;
+  if(e.key === 'Escape') closeLightbox();
+  if(e.key === 'ArrowLeft') goTo(index - 1);
+  if(e.key === 'ArrowRight') goTo(index + 1);
+});
+
+function closeLightbox(){
+  lightbox.classList.remove('open');
+  lightbox.setAttribute('aria-hidden','true');
+  lbTrack.innerHTML = '';
+  lbDots.innerHTML = '';
+  images = [];
+  index = 0;
+  slideWidth = 0;
+}
+
+// ------- swipe/drag on lbTrack (touch + mouse)
+function dragStart(clientX){
+  if(images.length <= 1) return;
   isDragging = true;
   startX = clientX;
   currentX = clientX;
-  lbImg.style.transition = 'none';
+  lbTrack.style.transition = 'none';
+  updateSizes();
 }
-function onDragMove(clientX){
+function dragMove(clientX){
   if(!isDragging) return;
   currentX = clientX;
   const delta = currentX - startX;
-  // mueve imagen horizontalmente; limitar un poco para evitar que se salga mucho
-  lbImg.style.transform = `translateX(${delta}px)`;
+  const base = - (slideWidth * index);
+  setTransform(base + delta);
 }
-function onDragEnd(){
+function dragEnd(){
   if(!isDragging) return;
   isDragging = false;
   const delta = currentX - startX;
-  lbImg.style.transition = 'transform .18s ease';
+  lbTrack.style.transition = 'transform .18s ease';
   if(Math.abs(delta) > THRESHOLD){
-    // swipe!
-    if(delta < 0){
-      // swipe left -> next
-      lbImg.style.transform = `translateX(-100vw)`;
-      setTimeout(()=> navLB(1), 100);
-    } else {
-      // swipe right -> prev
-      lbImg.style.transform = `translateX(100vw)`;
-      setTimeout(()=> navLB(-1), 100);
-    }
+    if(delta < 0) goTo(index + 1);
+    else goTo(index - 1);
   } else {
-    // volver al centro
-    lbImg.style.transform = 'translateX(0)';
+    goTo(index); // snap back
   }
 }
 
-// touch events
-lbImg.addEventListener('touchstart', (ev)=>{ if(ev.touches && ev.touches[0]) onDragStart(ev.touches[0].clientX); }, {passive:true});
-lbImg.addEventListener('touchmove', (ev)=>{ if(ev.touches && ev.touches[0]) onDragMove(ev.touches[0].clientX); }, {passive:true});
-lbImg.addEventListener('touchend', (ev)=>{ onDragEnd(); }, {passive:true});
+// touch
+lbTrack.addEventListener('touchstart', (e)=>{ if(e.touches && e.touches[0]) dragStart(e.touches[0].clientX); }, {passive:true});
+lbTrack.addEventListener('touchmove', (e)=>{ if(e.touches && e.touches[0]) dragMove(e.touches[0].clientX); }, {passive:true});
+lbTrack.addEventListener('touchend', (e)=>{ dragEnd(); }, {passive:true});
 
-// mouse events (desktop drag)
-lbImg.addEventListener('mousedown', (ev)=>{
-  ev.preventDefault();
-  onDragStart(ev.clientX);
-  // add listeners to document to catch moves outside image
-  function mm(e){ onDragMove(e.clientX); }
-  function mu(e){ onDragEnd(); document.removeEventListener('mousemove', mm); document.removeEventListener('mouseup', mu); }
+// mouse
+lbTrack.addEventListener('mousedown', (e)=>{
+  e.preventDefault();
+  dragStart(e.clientX);
+  function mm(ev){ dragMove(ev.clientX); }
+  function mu(ev){ dragEnd(); document.removeEventListener('mousemove', mm); document.removeEventListener('mouseup', mu); }
   document.addEventListener('mousemove', mm);
   document.addEventListener('mouseup', mu);
 });
 
-// evitar comportamiento por defecto de arrastrar imagen
-lbImg.addEventListener('dragstart', (e)=> e.preventDefault());
+// resize — recalcular
+window.addEventListener('resize', ()=> {
+  updateSizes();
+  goTo(index, true);
+});
 
-// ===== Año dinámico
+// evitar drag image por defecto
+lbTrack.addEventListener('dragstart', (e)=> e.preventDefault());
+
+// año dinámico
 document.getElementById('year').textContent = new Date().getFullYear();
+
+// Preload alternas (opcional)
+[...grid.querySelectorAll('.card')].forEach(card=>{
+  const imgs = (card.dataset.images||'').split(',').map(s=>s.trim()).filter(Boolean);
+  imgs.forEach(src=>{ const im = new Image(); im.src = src; });
+});
 </script>
 </body>
 </html>
