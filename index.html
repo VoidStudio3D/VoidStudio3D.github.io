@@ -6,7 +6,8 @@
 <title>Void Studio 3D</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:sans-serif; }
-  :root { --logo-width: 230px; }
+  /* Ajusta aquí el ancho del logo que reserva la barra (cámbialo a gusto) */
+  :root { --logo-width: 320px; }
 
   body { background:#111; overflow:hidden; transition:background-color .3s linear; }
 
@@ -16,7 +17,8 @@
     top:50%;
     left:50%;
     transform:translate(-50%, -50%);
-    font-size:30rem;
+    /* tamaño base del logo (ajústalo si quieres el tamaño por defecto) */
+    font-size:6.5rem;
     font-weight:bold;
     color:#fff;
     cursor:pointer;
@@ -128,13 +130,14 @@
 
   /* ---------- Responsivo ---------- */
   @media (max-width: 992px) {
-    :root { --logo-width: 190px; }
+    :root { --logo-width: 260px; }
     #carousel { height:420px; }
     .nav-tab { margin-right:14px; }
   }
   @media (max-width: 768px) {
-    :root { --logo-width: 100px; }
-    #intro-text { font-size:1rem; }
+    :root { --logo-width: 140px; }
+    /* en móviles el logo base se hace pequeño para no romper el layout */
+    #intro-text { font-size:1.1rem; }
     #menu-bar { height:100px; padding-left:var(--logo-width); }
     #nav-container { max-width:calc(100vw - 200px); }
     .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
@@ -145,7 +148,8 @@
     .project img { width:100%; height:180px; }
   }
   /* (bloques repetidos de overrides originales mantenidos para no alterar tu layout) */
-  #intro-text { font-size:1rem; }
+  /* conservé los bloques pero sólo cambié las reglas de font-size relacionadas al logo */
+  #intro-text { font-size:6.5rem; }
   #menu-bar { height:64px; padding-left:var(--logo-width); }
   #nav-container { max-width:calc(100vw - 140px); }
   .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
@@ -155,7 +159,8 @@
   .project { width:100%; }
   .project img { width:100%; height:220px; }
 
-  #intro-text { font-size:1rem; top:12px !important; left:12px !important; transform:none !important; }
+  /* repetidos: mantengo pero actualizo font-size para evitar que otro bloque lo reduzca */
+  #intro-text { font-size:6.5rem; top:12px !important; left:12px !important; transform:none !important; }
   #menu-bar { height:64px; padding-left:var(--logo-width); }
   #nav-container { max-width:calc(100vw - 140px); }
   .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
@@ -165,7 +170,8 @@
   .project { width:100%; }
   .project img { width:100%; height:220px; }
 
-  #intro-text { font-size:1rem; top:12px !important; left:12px !important; transform:none !important; }
+  /* otro bloque repetido (mantengo) */
+  #intro-text { font-size:6.5rem; top:12px !important; left:12px !important; transform:none !important; }
   #menu-bar { height:64px; padding-left:var(--logo-width); }
   #nav-container { max-width:calc(100vw - 140px); }
   .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
@@ -189,9 +195,11 @@
     .projects-grid { display:grid; grid-template-columns: 1fr !important; gap:20px; width:100%; }
   }
 
-  /* Estados del logo para animación */
-  #intro-text.centered { position:absolute !important; top:50% !important; left:50% !important; transform:translate(-50%, -50%) !important; font-size:2rem !important; }
-  #intro-text.sticky { position:fixed !important; top:14px !important; left:16px !important; transform:none !important; font-size:1.5rem !important; z-index:1001 !important; }
+  /* Estados del logo para animación (ajustados: solo cambié tamaños) */
+  /* tamaño cuando está centrado (estado inicial) - cámbialo aquí para el logo centrado */
+  #intro-text.centered { position:absolute !important; top:50% !important; left:50% !important; transform:translate(-50%, -50%) !important; font-size:6.5rem !important; }
+  /* tamaño cuando pasa a sticky en la cabecera - cámbialo aquí para el logo pequeño en la barra */
+  #intro-text.sticky { position:fixed !important; top:14px !important; left:16px !important; transform:none !important; font-size:1.9rem !important; z-index:1001 !important; }
   @media (max-width: 768px) { #intro-text.sticky { font-size:1rem !important; } }
   @media (max-width: 768px) { #intro-text.centered { white-space: nowrap !important; } }
 </style>
@@ -258,7 +266,7 @@
       <h2>Proyectos destacados</h2>
       <div class="projects-grid">
         <!-- Usa data-link en lugar de onclick para abrir visor y tener enlace al proyecto -->
-        <div class="project" data-link="proyecto1.html" data-images="images/proyectos/proyecto-01-01.jpg,images/proyectos/proyecto-01-02.jpg">
+        <div class="project" data-link="Proyecto1.html" data-images="images/proyectos/proyecto-01-01.jpg,images/proyectos/proyecto-01-02.jpg">
           <img src="images/proyectos/proyecto-01-01.jpg" alt="Proyecto 1" loading="lazy" />
           <div class="project-info">
             <h3>Proyecto 1</h3>
