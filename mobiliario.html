@@ -34,17 +34,23 @@
   .header p{margin-top:8px;color:#c8c8c8}
 
   /* ======= Filtros ======= */
-  .filters{max-width:1200px;margin:18px auto 26px;padding:0 16px;display:grid;grid-template-columns:1fr auto;gap:12px}
+  .filters{max-width:1200px;margin:18px auto 26px;padding:0 16px;display:grid;grid-: 1fr auto;gap:12px}
   .chips{display:flex;flex-wrap:wrap;gap:10px}
   .chip{background:#171717;color:#ddd;border:1px solid rgba(255,255,255,.08);padding:8px 12px;border-radius:999px;cursor:pointer;transition:.15s}
   .chip.active,.chip:hover{background:#fff;color:#000}
-  .search{display:flex;align-items:center;gap:8px;background:#171717;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:8px 12px}
-  .search input{all:unset;color:#fff;width:220px}
+  
+  .search{display:flex;align-items:center;gap:8px;background:#171717;padding:0 12px;border-radius:999px;border:1px solid rgba(255,255,255,.08)}
+  .search input{background:none;border:none;color:#fff;padding:8px 0;outline:none;width:140px}
 
   /* ======= Grilla de proyectos ======= */
-  .grid{max-width:1200px;margin:0 auto;padding:0 16px 80px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+  .grid{max-width:900px;margin:0 auto;padding:0 16px 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
   @media(min-width:769px) and (max-width:1024px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-  @media(max-width:768px){.topbar{height:64px;padding-left:120px}.logo{font-size:.95rem}.grid{grid-template-columns:1fr}.search input{width:140px}}
+  @media(max-width:768px){.topbar{height:64px;padding-left:120px}.logo{font-size:.95rem}.grid{grid-template-columns:1fr}}
+  @media(max-width:768px){
+    .grid{max-width:420px;grid-template-columns:repeat(3,1fr);gap:4px;}
+    .card{border-radius:0;border:none;}
+    .meta{display:none;}
+  }
 
   .card{background:#0f0f0f;border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .25s, box-shadow .25s}
   .card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.35)}
@@ -59,23 +65,40 @@
   .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
   .tag{font-size:.75rem;background:#1a1a1a;border:1px solid rgba(255,255,255,.1);padding:4px 8px;border-radius:999px;color:#ddd}
 
-  /* ======= Lightbox ======= */
-  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:2000}
+  /* ======= Lightbox Instagram Style ======= */
+  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;align-items:center;justify-content:center;z-index:2000;touch-action:none}
   .lightbox.open{display:flex}
-  .lightbox-inner{position:relative;max-width:92vw;max-height:86vh}
-  .lightbox img{display:block;max-width:92vw;max-height:86vh;object-fit:contain;border-radius:10px}
-  .lb-close,.lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(4px);color:#fff;height:44px;width:44px;border-radius:999px;display:grid;place-items:center;font-size:22px;cursor:pointer}
-  .lb-close{top:-54px;right:0;transform:none}
+  .lightbox-inner{position:relative;width:100%;max-width:92vw;display:flex;flex-direction:column;align-items:center;}
+  
+  /* Nuevo contenedor de slider para desplazamiento sutil */
+  .lb-viewport { width: 100%; overflow: hidden; position: relative; border-radius: 10px; }
+  .lb-track { display: flex; transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); width: 100%; }
+  .lb-track img { width: 100%; height: 70vh; object-fit: contain; flex-shrink: 0; user-select: none; pointer-events: none; }
+
+  /* Controles y Dots */
+  .lb-close{position:absolute;top:-54px;right:0;background:none;border:none;color:#fff;font-size:26px;cursor:pointer;z-index:20}
+  .lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(4px);color:#fff;height:44px;width:44px;border-radius:999px;display:grid;place-items:center;font-size:22px;cursor:pointer;z-index:10}
   .lb-prev{left:-56px}
   .lb-next{right:-56px}
-  @media(max-width:768px){.lb-prev{left:6px}.lb-next{right:6px}.lb-close{right:6px;top:6px}}
 
-  /* Footer sutil */
+  .lb-dots { display: flex; gap: 8px; margin-top: 15px; justify-content: center; }
+  .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.3); border-radius: 50%; transition: 0.3s; }
+  .dot.active { background: #fff; transform: scale(1.3); }
+
+  #lbInfo { margin-top: 15px; text-align: center; color: #fff; width: 100%; }
+  #lbInfo h3 { font-size: 1.2rem; margin-bottom: 5px; }
+  #lbInfo p { color: #ccc; font-size: 0.95rem; max-width: 600px; margin: 0 auto; }
+
+  @media(max-width:768px){
+    .lb-prev,.lb-next{display:none;}
+    .lb-close{right:6px;top:6px}
+    .lb-track img { height: 60vh; }
+  }
+
   footer{max-width:1200px;margin:20px auto 60px;padding:0 16px;color:#bdbdbd;font-size:.9rem}
 </style>
 </head>
 <body>
-  <!-- ===== Logo fijo y Topbar ===== -->
   <div class="logo-wrap"><a class="logo" href="index.html">Void Studio 3D</a></div>
   <header class="topbar">
     <nav class="nav" id="nav">
@@ -98,13 +121,11 @@
     </div>
   </header>
 
-  <!-- ===== Encabezado ===== -->
   <section class="header">
-    <h1>Diseño de mobiliario</h1>
+    <h1>Diseño Moviliario</h1>
     <p>Explora una selección de trabajos de interiorismo, stands, espacios comerciales y más.</p>
   </section>
 
-  <!-- ===== Filtros ===== -->
   <section class="filters">
     <div class="chips" id="chips">
       <button class="chip active" data-filter="all">Todos</button>
@@ -121,7 +142,7 @@
     </div>
   </section>
 
-  <!-- ===== Grilla ===== -->
+ <!-- ===== Grilla ===== -->
   <section class="grid" id="grid">
     <!-- Tarjeta ejemplo: duplicar y ajustar rutas -->
     <article class="card" data-category="interiores" data-tags="living madera cálido" data-images="images/proyectos/proyecto-01-01.jpg,images/proyectos/proyecto-01-02.jpg">
@@ -197,13 +218,24 @@
     </article>
   </section>
 
-  <!-- ===== Lightbox ===== -->
+
   <div class="lightbox" id="lightbox" aria-hidden="true">
     <div class="lightbox-inner">
       <button class="lb-close" id="lbClose" aria-label="Cerrar">✕</button>
       <button class="lb-prev" id="lbPrev" aria-label="Anterior">‹</button>
-      <img id="lbImg" src="" alt="Proyecto"/>
       <button class="lb-next" id="lbNext" aria-label="Siguiente">›</button>
+      
+      <div class="lb-viewport">
+        <div class="lb-track" id="lbTrack">
+          </div>
+      </div>
+
+      <div class="lb-dots" id="lbDots"></div>
+      
+      <div id="lbInfo">
+        <h3 id="lbInfoTitle"></h3>
+        <p id="lbInfoDesc"></p>
+      </div>
     </div>
   </div>
 
@@ -212,13 +244,12 @@
   </footer>
 
 <script>
-// ===== Menú social
+// --- Código Original para Menú y Filtros ---
 const burger = document.getElementById('burger');
 const dropdown = document.getElementById('dropdown');
 burger.addEventListener('click',()=>{ dropdown.style.display = dropdown.style.display==='block'?'none':'block' })
 document.addEventListener('click', (e)=>{ if(!burger.contains(e.target) && !dropdown.contains(e.target)) dropdown.style.display='none' })
 
-// ===== Filtros y búsqueda
 const chips = document.getElementById('chips');
 const grid = document.getElementById('grid');
 const search = document.getElementById('search');
@@ -246,40 +277,78 @@ chips.addEventListener('click', (e)=>{
 })
 search.addEventListener('input', applyFilters);
 
-// ===== Hover: alternar imagen
-[...grid.querySelectorAll('.card')].forEach(card=>{
-  const main = card.querySelector('img.main');
-  const alt = card.querySelector('img.alt');
-  // ya se maneja con CSS; aseguramos preload de alt
-  const preload = new Image(); preload.src = alt.src;
-})
-
-// ===== Lightbox básico (usa data-images)
+// --- Lógica del Lightbox Estilo Instagram (Carrusel + Swipe + Info) ---
 const lb = document.getElementById('lightbox');
-const lbImg = document.getElementById('lbImg');
-const lbPrev = document.getElementById('lbPrev');
-const lbNext = document.getElementById('lbNext');
-const lbClose = document.getElementById('lbClose');
-let currentImages = []; let photoIndex = 0;
+const lbTrack = document.getElementById('lbTrack');
+const lbDots = document.getElementById('lbDots');
+const lbInfoTitle = document.getElementById('lbInfoTitle');
+const lbInfoDesc = document.getElementById('lbInfoDesc');
+let currentImages = []; 
+let photoIndex = 0;
+let touchStartX = 0;
 
-function openLB(imgs, start=0){ currentImages = imgs; photoIndex = start; lbImg.src = currentImages[photoIndex]; lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); }
-function closeLB(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); lbImg.src=''; }
-function navLB(dir){ photoIndex = (photoIndex + dir + currentImages.length) % currentImages.length; lbImg.src = currentImages[photoIndex]; }
+function updateSlider() {
+    lbTrack.style.transform = `translateX(-${photoIndex * 100}%)`;
+    // Actualizar puntos
+    const dots = lbDots.querySelectorAll('.dot');
+    dots.forEach((dot, i) => dot.classList.toggle('active', i === photoIndex));
+}
+
+function openLB(imgs, title, desc, start=0){ 
+    currentImages = imgs; 
+    photoIndex = start; 
+    
+    // Inyectar imágenes al track
+    lbTrack.innerHTML = currentImages.map(img => `<img src="${img}" alt="img">`).join('');
+    
+    // Inyectar puntos
+    lbDots.innerHTML = currentImages.map((_, i) => `<div class="dot ${i === 0 ? 'active' : ''}"></div>`).join('');
+    
+    lbInfoTitle.textContent = title;
+    lbInfoDesc.textContent = desc;
+    lb.classList.add('open'); 
+    lb.setAttribute('aria-hidden','false');
+    updateSlider();
+}
+
+function closeLB(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); lbTrack.innerHTML=''; }
+function navLB(dir){ 
+    photoIndex = (photoIndex + dir + currentImages.length) % currentImages.length; 
+    updateSlider();
+}
 
 grid.addEventListener('click', (e)=>{
   const card = e.target.closest('.card');
   if(!card) return;
   const imgs = (card.dataset.images||'').split(',').map(s=>s.trim()).filter(Boolean);
-  if(imgs.length) openLB(imgs, 0);
+  const title = card.querySelector('h3').textContent;
+  const desc = card.querySelector('.meta p').textContent;
+  if(imgs.length) openLB(imgs, title, desc, 0);
 })
 
-lbPrev.addEventListener('click', ()=> navLB(-1));
-lbNext.addEventListener('click', ()=> navLB(1));
-lbClose.addEventListener('click', closeLB);
-lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLB(); })
-window.addEventListener('keydown', (e)=>{ if(lb.classList.contains('open')){ if(e.key==='Escape') closeLB(); if(e.key==='ArrowLeft') navLB(-1); if(e.key==='ArrowRight') navLB(1); } })
+document.getElementById('lbPrev').addEventListener('click', (e)=> { e.stopPropagation(); navLB(-1); });
+document.getElementById('lbNext').addEventListener('click', (e)=> { e.stopPropagation(); navLB(1); });
+document.getElementById('lbClose').addEventListener('click', closeLB);
 
-// ===== Año dinámico
+// Swipe Logic
+lb.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+lb.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+        diff > 0 ? navLB(1) : navLB(-1);
+    }
+}, {passive: true});
+
+lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLB(); })
+window.addEventListener('keydown', (e)=>{ 
+    if(lb.classList.contains('open')){ 
+        if(e.key==='Escape') closeLB(); 
+        if(e.key==='ArrowLeft') navLB(-1); 
+        if(e.key==='ArrowRight') navLB(1); 
+    } 
+})
+
 document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 </body>
