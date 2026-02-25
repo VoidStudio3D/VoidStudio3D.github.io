@@ -18,7 +18,7 @@
     left:50%;
     transform:translate(-50%, 50%);
     /* tamaño base del logo (ajústalo si quieres el tamaño por defecto) */
-   max-width: 150px;  /* Cambia este valor para hacerlo más grande o pequeño */
+   max-width: 300px;  /* Cambia este valor para hacerlo más grande o pequeño */
    width: 80%;
     color:#fff;
     cursor:pointer;
@@ -197,11 +197,16 @@
 
   /* Estados del logo para animación (ajustados: solo cambié tamaños) */
   /* tamaño cuando está centrado (estado inicial) - cámbialo aquí para el logo centrado */
-  #intro-text.centered { position:absolute !important; top:50% !important; left:50% !important; transform:translate(-50%, -50%) !important; font-size:6.5rem !important; }
+  #intro-text.centered { position:absolute !important; top:50% !important; left:50% !important; transform:translate(-50%, -50%) !important; width: 5000px; height: auto;
+}
   /* tamaño cuando pasa a sticky en la cabecera - cámbialo aquí para el logo pequeño en la barra */
-  #intro-text.sticky { position:fixed !important; top:14px !important; left:16px !important; transform:none !important; font-size:1.9rem !important; z-index:1001 !important; }
-  @media (max-width: 768px) { #intro-text.sticky { font-size:1rem !important; } }
-  @media (max-width: 768px) { #intro-text.centered { white-space: nowrap !important; } }
+  #intro-text.sticky { position:fixed !important; top:2px !important; left:15px !important; transform:none !important;width: 120px; 
+  height: auto;
+  
+  z-index: 1001 !important;
+}
+  @media (max-width: 100px) { #intro-text.sticky { font-size:1rem !important; } }
+  @media (max-width: 100px) { #intro-text.centered { white-space: nowrap !important; } }
 </style>
 </head>
 <body>
@@ -477,4 +482,3 @@ window.addEventListener('load', () => {
 </script>
 </body>
 </html>
-
