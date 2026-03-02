@@ -53,7 +53,7 @@
   #hamburger { width: 30px; height: 18px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; z-index: 2600; margin-left: 10px; flex-shrink: 0; }
   #hamburger span { width: 100%; height: 2px; background: #fff; transition: 0.3s; }
 
-  /* --- MENÚ LATERAL (REDISEÑADO B&W) --- */
+  /* --- MENÚ LATERAL B&W --- */
   #side-menu { 
     position: fixed; top: 0; right: -100%; width: 300px; height: 100%; 
     background: #000; z-index: 2500; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
@@ -63,7 +63,6 @@
   #side-menu.open { right: 0; }
   
   .menu-label { font-size: 0.65rem; letter-spacing: 4px; color: #555; margin-bottom: 30px; text-transform: uppercase; }
-  
   .social-links-menu { display: flex; flex-direction: column; gap: 25px; }
   
   .social-item { 
@@ -81,6 +80,7 @@
     width: 100%; max-width: 1800px; margin: 100px auto 0; 
     position: relative; overflow: hidden; background: #000; 
     opacity: 0; transform: translateY(30px); transition: 1s; aspect-ratio: 16 / 9; 
+    touch-action: pan-y; /* Permite scroll vertical pero no interfiere con el swipe horizontal */
   }
   .slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: 1s; cursor: pointer; }
   .slide.active { opacity: 1; z-index: 5; }
@@ -90,14 +90,13 @@
   .dot { display: inline-block; width: 8px; height: 8px; margin: 0 4px; border-radius: 50%; background: rgba(255,255,255,0.3); }
   .dot.active { background: #fff; }
 
-  /* --- ESTRATEGIA (3 COLUMNAS) --- */
+  /* --- SECCIONES --- */
   .about-section { width: 95%; max-width: 1400px; margin: 100px auto; text-align: center; }
   .about-section h2 { font-size: 2.2rem; margin-bottom: 60px; letter-spacing: 5px; font-weight: 300; border-bottom: 1px solid #333; padding-bottom: 25px; }
   .about-content { display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; text-align: left; }
   .about-block h3 { color: #fff; font-size: 1.2rem; margin-bottom: 15px; text-transform: uppercase; border-left: 2px solid #fff; padding-left: 15px; }
   .about-block p { font-size: 1rem; color: #aaa; }
 
-  /* --- METODOLOGÍA --- */
   .process-section { width: 95%; max-width: 1200px; margin: 80px auto; text-align: center; }
   .process-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
   .process-step { padding: 30px 20px; border: 1px solid #222; border-radius: 12px; }
@@ -105,7 +104,6 @@
   .process-step p { font-size: 0.9rem; color: #777; }
   .step-num { font-size: 2rem; font-weight: bold; color: #333; display: block; margin-bottom: 5px; }
 
-  /* --- PORTAFOLIO --- */
   .projects-section { width: 95%; max-width: 1400px; margin: 100px auto; }
   .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
   .project { cursor: pointer; text-align: center; }
@@ -116,6 +114,7 @@
   #whatsapp-float.visible { opacity: 1; visibility: visible; }
   .scroll-reveal { opacity: 0; transition: 1s; transform: translateY(20px); }
 
+  /* --- RESPONSIVE --- */
   @media (max-width: 768px) {
     :root { --logo-width: 85px; }
     #menu-bar { height: 60px; padding-left: 85px; }
@@ -138,7 +137,7 @@
 
   <img src="VOID STUDIOB.png" id="intro-text" alt="Void Studio 3D">
 
-  <a href="https://wa.me/59170000000" target="_blank" id="whatsapp-float">
+  <a href="https://wa.me/59179779088" target="_blank" id="whatsapp-float">
     <img src="https://img.icons8.com/color/48/ffffff/whatsapp--v1.png" alt="WA" width="35">
   </a>
 
@@ -155,25 +154,20 @@
   </div>
 
   <div id="menu-overlay"></div>
-  
   <nav id="side-menu">
     <div class="menu-label">Conecta con nosotros</div>
     <div class="social-links-menu">
-        <a href="https://instagram.com/voidstudio3d" target="_blank" class="social-item">
-            <i class="fa-brands fa-instagram"></i>
-            <span>Instagram</span>
+        <a href="https://www.instagram.com/voidstudio8?igsh=N2hmaTkwbGw0dnk0" target="_blank" class="social-item">
+            <i class="fa-brands fa-instagram"></i><span>Instagram</span>
         </a>
-        <a href="https://facebook.com/voidstudio3d" target="_blank" class="social-item">
-            <i class="fa-brands fa-facebook-f"></i>
-            <span>Facebook</span>
+        <a href="https://www.facebook.com/profile.php?id=61588603481061" target="_blank" class="social-item">
+            <i class="fa-brands fa-facebook-f"></i><span>Facebook</span>
         </a>
-        <a href="https://behance.net/voidstudio3d" target="_blank" class="social-item">
-            <i class="fa-brands fa-behance"></i>
-            <span>Behance</span>
+        <a href="https://www.behance.net/NilsQuiroga" target="_blank" class="social-item">
+            <i class="fa-brands fa-behance"></i><span>Behance</span>
         </a>
-        <a href="mailto:info@voidstudio3d.com" class="social-item">
-            <i class="fa-regular fa-envelope"></i>
-            <span>Email</span>
+        <a href="nilsbasic8@gmail.com" class="social-item">
+            <i class="fa-regular fa-envelope"></i><span>Email</span>
         </a>
     </div>
   </nav>
@@ -197,15 +191,15 @@
       <div class="about-content">
         <div class="about-block">
           <h3>Nuestra Filosofía</h3>
-          <p>En VOID STUDIO 3D, entendemos que un render no es solo una imagen, sino la representación de una ambición. Nos especializamos en cerrar la brecha entre el diseño conceptual y la percepción emocional, ofreciendo soluciones de visualización que actúan como herramientas de venta decisivas.</p>
+          <p>En VOID STUDIO 3D, entendemos que un render no es solo una imagen, sino la representación de una ambición. Nos especializamos en cerrar la brecha entre el diseño conceptual y la percepción emocional.</p>
         </div>
         <div class="about-block">
           <h3>Vanguardia Tecnológica</h3>
-          <p>Operamos en la intersección del arte digital y la ingeniería visual. Implementamos flujos de trabajo avanzados con fotorrealismo y simulaciones lumínicas basadas en física real, garantizando una precisión técnica absoluta en cada proyecto entregado.</p>
+          <p>Operamos en la intersección del arte digital y la ingeniería visual. Implementamos flujos de trabajo avanzados con fotorrealismo y simulaciones lumínicas basadas en física real.</p>
         </div>
         <div class="about-block">
           <h3>Compromiso y Alcance</h3>
-          <p>Desde Cochabamba, Bolivia, exportamos creatividad de alta gama. Creemos en la excelencia sin compromisos, asegurando que el resultado final no solo cumpla con las expectativas, sino que redefina el estándar estético de la industria internacional.</p>
+          <p>Desde Cochabamba, Bolivia, exportamos creatividad de alta gama. Creemos en la excelencia sin compromisos, asegurando que el resultado final redefina el estándar estético.</p>
         </div>
       </div>
     </section>
@@ -254,6 +248,7 @@ window.addEventListener('load', () => {
   
   let index = 0;
 
+  // Intro
   intro.addEventListener('click', () => {
     intro.classList.add('sticky');
     document.body.style.overflowY = 'auto';
@@ -267,6 +262,7 @@ window.addEventListener('load', () => {
     }, 400);
   });
 
+  // Toggle Menú
   const toggleMenu = () => {
     sideMenu.classList.toggle('open');
     overlay.style.display = sideMenu.classList.contains('open') ? 'block' : 'none';
@@ -274,16 +270,28 @@ window.addEventListener('load', () => {
   hamburger.addEventListener('click', toggleMenu);
   overlay.addEventListener('click', toggleMenu);
 
+  // Carrusel Logic
   function showSlide(n) {
     slides[index].classList.remove('active'); dots[index].classList.remove('active');
     index = (n + slides.length) % slides.length;
     slides[index].classList.add('active'); dots[index].classList.add('active');
   }
 
+  // Swipe Mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+  carousel.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+  carousel.addEventListener('touchend', e => { 
+    touchEndX = e.changedTouches[0].screenX;
+    if (touchEndX < touchStartX - 50) showSlide(index + 1);
+    if (touchEndX > touchStartX + 50) showSlide(index - 1);
+  }, {passive: true});
+
+  // Clic en diapositiva
   slides.forEach(slide => {
     slide.addEventListener('click', () => {
-        const url = slide.getAttribute('data-url');
-        if(url) window.location.href = url;
+      const url = slide.getAttribute('data-url');
+      if(url) window.location.href = url;
     });
   });
 
@@ -292,6 +300,7 @@ window.addEventListener('load', () => {
   
   setInterval(() => { if(main.style.opacity === '1') showSlide(index + 1); }, 5000);
 
+  // Scroll Reveal
   const observer = new IntersectionObserver(entries => {
     entries.forEach(en => { if(en.isIntersecting) { en.target.style.opacity = '1'; en.target.style.transform = 'translateY(0)'; } });
   }, { threshold: 0.05 });
