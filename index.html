@@ -2,482 +2,300 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Void Studio 3D</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+<title>Void Studio 3D | Oficial</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; font-family:sans-serif; }
-  /* Ajusta aquí el ancho del logo que reserva la barra (cámbialo a gusto) */
-  :root { --logo-width: 320px; }
-
-  body { background:#111; overflow:hidden; transition:background-color .3s linear; }
-
-  /* Logo (puede ser imagen o texto) */
-  #intro-text {
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, 50%);
-    /* tamaño base del logo (ajústalo si quieres el tamaño por defecto) */
-   max-width: 300px;  /* Cambia este valor para hacerlo más grande o pequeño */
-   width: 80%;
-    color:#fff;
-    cursor:pointer;
-    transition: all 1s ease, color .5s ease;
-    z-index:10;
-  }
-
-  /* Barra superior */
-  #menu-bar {
-    position:fixed; top:0; left:0; height:45px; width:100%; background:#000;
-    display:flex; align-items:center; justify-content:space-between;
-    padding-left:var(--logo-width);
-    opacity:0; visibility:hidden; transition:opacity 1s ease; z-index:1000;
-  }
-
-  /* Contenedor desplazable de tabs */
-  #nav-container {
-    display:block; overflow-x:auto; white-space:nowrap; -webkit-overflow-scrolling:touch;
-    scrollbar-width:none; padding:0 12px;
-  }
-  #nav-container::-webkit-scrollbar { display:none; }
-
-  .nav-tab {
-    color:#fff; text-decoration:none; display:inline-block; margin-right:18px; font-size:1rem;
-    opacity:0; transition:opacity .5s ease, transform .3s ease; padding:6px 10px; border-radius:6px;
-  }
-  .nav-tab:hover { transform:scale(1.15); }
-
-  /* Menú hamburguesa social */
-  #social-menu { position:relative; margin-right:10px; flex:0 0 auto; }
-  #social-menu button { background:none; border:none; cursor:pointer; display:flex; flex-direction:column; justify-content:space-between; width:26px; height:18px; }
-  #social-menu button span { display:block; height:3px; width:100%; background:#fff; border-radius:2px; }
-  #social-menu .dropdown { display:none; position:absolute; top:28px; right:0; background:#111; border-radius:8px; overflow:hidden; flex-direction:column; min-width:170px; z-index:10; }
-  #social-menu .dropdown a { color:#fff; padding:10px 12px; text-decoration:none; display:flex; align-items:center; gap:10px; }
-  #social-menu .dropdown a img { width:20px; height:20px; filter:grayscale(100%); transition:filter .3s ease; }
-  #social-menu .dropdown a:hover img { filter:grayscale(0%); }
-
-  /* Contenido principal */
-  #main-content { opacity:0; visibility:hidden; transition:opacity 1s ease; }
-
-  /* Carrusel */
-  #carousel { width:100%; max-width:1800px; height:1000px; margin:200px auto 0; position:relative; overflow:hidden; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,.2); opacity:0; transform:translateY(-50px); transition:all 1s ease; }
-  .slide { position:absolute; inset:0; background-size:cover; background-position:center; opacity:0; transition:opacity 1s ease; }
-  .slide.active { opacity:1; }
-  .arrow { position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,.5); color:#fff; border:none; width:45px; height:45px; border-radius:50%; cursor:pointer; font-size:1.5rem; }
-  .arrow:hover { background:rgba(0,0,0,.8); }
-  .arrow.left { left:15px; } .arrow.right { right:15px; }
-  .dots { position:absolute; bottom:15px; left:0; right:0; text-align:center; }
-  .dot { display:inline-block; width:12px; height:12px; margin:5px; border-radius:50%; background:#000; cursor:pointer; transition:background-color .3s ease; }
-  .dot.active { background:#fff; }
-
-  /* Secciones */
-  .section { width:80%; max-width:1100px; margin:150px auto; opacity:0; transform:translateY(60px); transition:all .8s ease; }
-  .section.visible { opacity:1; transform:translateY(0); }
-  .section h2 { font-size:2rem; margin-bottom:20px; color:#fff; }
-
-  /* Proyectos */
-  .projects-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:24px; width:100%; }
-  .project { display:flex; flex-direction:row; align-items:center; background:#f4f4f4; border-radius:10px; padding:24px; gap:20px; cursor:pointer; overflow:hidden; position:relative; width:100%; }
-  .project { display:flex; align-items:center; background:#f4f4f4; border-radius:10px; padding:20px; margin-bottom:20px; gap:20px; cursor:pointer; overflow:hidden; position:relative; }
-  .project img { width:65%; height:auto; object-fit:cover; border-radius:10px; transition:transform .3s ease; }
-  .project:hover img { transform:scale(1.05); }
-  .project-info { width:40%; display:flex; flex-direction:column; justify-content:center; }
-  .project-info h3 { margin-bottom:10px; }
-  .project-info p { color:#555; }
-
-  /* Contacto */
-  #contacto { text-align:center; background:#000; color:#fff; padding:80px 20px; border-radius:20px; }
-  #contacto h2 { font-size:2rem; margin-bottom:20px; }
-  #contacto p { margin:10px 0; font-size:1rem; }
-  #contacto a { color:#fff; text-decoration:none; font-weight:bold; }
-  #contacto a:hover { text-decoration:underline; }
-
-  /* ---------- Lightbox (visor) ---------- */
-  #lightbox {
-    position:fixed; inset:0; background:rgba(0,0,0,.9);
-    display:none; align-items:center; justify-content:center; z-index:2000;
-  }
-  #lightbox.open { display:flex; }
-  .lb-inner {
-    position:relative; max-width:92vw; max-height:86vh;
-    display:flex; align-items:center; justify-content:center;
-  }
-  #lb-img {
-    max-width:92vw; max-height:86vh; width:auto; height:auto; display:block; border-radius:10px;
-    box-shadow:0 10px 30px rgba(0,0,0,.6);
-  }
-  .lb-arrow {
-    position:absolute; top:50%; transform:translateY(-50%);
-    width:46px; height:46px; border-radius:999px; border:none; cursor:pointer;
-    background:rgba(0,0,0,.55); color:#fff; font-size:22px;
-    display:grid; place-items:center;
-  }
-  .lb-arrow:hover { background:rgba(0,0,0,.8); }
-  #lb-prev { left:10px; }
-  #lb-next { right:10px; }
-  #lb-close {
-    position:absolute; top:-54px; right:0; width:44px; height:44px; border-radius:999px;
-    border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.1); color:#fff; cursor:pointer; font-size:18px;
-  }
-  /* Enlace al proyecto: arriba, centrado dentro de la imagen */
-  #lb-link {
-    position:absolute; top:10px; left:50%; transform:translateX(-50%);
-    background:rgba(0,0,0,.6); color:#fff; text-decoration:none; font-weight:700;
-    padding:10px 14px; border-radius:999px; border:1px solid rgba(255,255,255,.25);
-    backdrop-filter:blur(3px);
-  }
-  #lb-link:hover { background:rgba(0,0,0,.8); }
-
-  /* ---------- Responsivo ---------- */
-  @media (max-width: 992px) {
-    :root { --logo-width: 260px; }
-    #carousel { height:420px; }
-    .nav-tab { margin-right:14px; }
-  }
-  @media (max-width: 768px) {
-    :root { --logo-width: 140px; }
-    /* en móviles el logo base se hace pequeño para no romper el layout */
-    #intro-text { font-size:1.1rem; }
-    #menu-bar { height:100px; padding-left:var(--logo-width); }
-    #nav-container { max-width:calc(100vw - 200px); }
-    .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
-    #carousel { width:100%; height:45vh; margin-top:90px; }
-    .section { width:92%; margin:80px auto; }
-    .projects-grid { grid-template-columns: 1fr; }
-    .project { flex-direction:column; align-items:flex-start; }
-    .project img { width:100%; height:180px; }
-  }
-  /* (bloques repetidos de overrides originales mantenidos para no alterar tu layout) */
-  /* conservé los bloques pero sólo cambié las reglas de font-size relacionadas al logo */
-  #intro-text { font-size:6.5rem; }
-  #menu-bar { height:64px; padding-left:var(--logo-width); }
-  #nav-container { max-width:calc(100vw - 140px); }
-  .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
-  #carousel { width:100%; height:45vh; margin-top:90px; }
-  .section { width:92%; margin:80px auto; }
-  .projects-grid { grid-template-columns: 1fr; }
-  .project { width:100%; }
-  .project img { width:100%; height:220px; }
-
-  /* repetidos: mantengo pero actualizo font-size para evitar que otro bloque lo reduzca */
-  #intro-text { font-size:6.5rem; top:12px !important; left:12px !important; transform:none !important; }
-  #menu-bar { height:64px; padding-left:var(--logo-width); }
-  #nav-container { max-width:calc(100vw - 140px); }
-  .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
-  #carousel { width:100%; height:45vh; margin-top:90px; }
-  .section { width:92%; margin:80px auto; }
-  .projects-grid { grid-template-columns: 1fr; }
-  .project { width:100%; }
-  .project img { width:100%; height:220px; }
-
-  /* otro bloque repetido (mantengo) */
-  #intro-text { font-size:6.5rem; top:12px !important; left:12px !important; transform:none !important; }
-  #menu-bar { height:64px; padding-left:var(--logo-width); }
-  #nav-container { max-width:calc(100vw - 140px); }
-  .nav-tab { font-size:.95rem; margin-right:12px; padding:6px 8px; }
-  #carousel { width:100%; height:45vh; margin-top:90px; }
-  .section { width:92%; margin:80px auto; }
-  .project { flex-direction:column; align-items:flex-start; }
-  .project img { width:100%; height:180px; }
-
-  @media (max-width: 420px) {
-    :root { --logo-width: 88px; }
-    #carousel { height:40vh; }
-  }
-
-  @media (min-width: 993px) {
-    .projects-grid { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap:24px; width:100%; }
-  }
-  @media (min-width: 769px) and (max-width: 992px) {
-    .projects-grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap:24px; width:100%; }
-  }
-  @media (max-width: 768px) {
-    .projects-grid { display:grid; grid-template-columns: 1fr !important; gap:20px; width:100%; }
-  }
-
-  /* Estados del logo para animación (ajustados: solo cambié tamaños) */
-  /* tamaño cuando está centrado (estado inicial) - cámbialo aquí para el logo centrado */
-  #intro-text.centered { position:absolute !important; top:50% !important; left:50% !important; transform:translate(-50%, -50%) !important; width: 5000px; height: auto;
-}
-  /* tamaño cuando pasa a sticky en la cabecera - cámbialo aquí para el logo pequeño en la barra */
-  #intro-text.sticky { position:fixed !important; top:2px !important; left:15px !important; transform:none !important;width: 120px; 
-  height: auto;
   
-  z-index: 1001 !important;
-}
-  @media (max-width: 100px) { #intro-text.sticky { font-size:1rem !important; } }
-  @media (max-width: 100px) { #intro-text.centered { white-space: nowrap !important; } }
+  html, body { 
+    overflow-x: hidden; 
+    overflow-y: hidden; 
+    width: 100%; height: 100%;
+    background:#111; color: #fff; line-height: 1.6; 
+  }
+
+  :root { 
+    --logo-width: 320px; 
+    --accent-color: #25D366; 
+  }
+
+  /* --- LOGO INICIAL --- */
+  #intro-text {
+    position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%);
+    width: 280px; cursor: pointer; transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1100;
+  }
+  #intro-text.sticky { top: 5px !important; left: 10px !important; transform: translate(0, 0) !important; width: 80px !important; }
+
+  /* --- BARRA DE NAVEGACIÓN --- */
+  #menu-bar {
+    position: fixed; top: 0; left: 0; height: 80px; width: 100%; background: #000;
+    display: flex; align-items: center; justify-content: flex-start;
+    padding-left: var(--logo-width); opacity: 0; visibility: hidden; transition: 0.5s; z-index: 1000;
+  }
+  
+  #nav-container { 
+    display: flex; overflow-x: auto; white-space: nowrap; scrollbar-width: none;
+    padding: 0 15px; gap: 15px; width: 100%; align-items: center; 
+  }
+  #nav-container::-webkit-scrollbar { display: none; }
+  
+  .nav-tab { 
+    color: #fff; text-decoration: none; padding: 10px 5px; 
+    font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
+    opacity: 0; transition: 0.3s; flex-shrink: 0; position: relative;
+  }
+  .nav-tab::after {
+    content: ''; position: absolute; bottom: 5px; left: 0; width: 0; height: 1px; background: #fff; transition: 0.3s;
+  }
+  .nav-tab:hover::after { width: 100%; }
+
+  #hamburger { width: 30px; height: 18px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; z-index: 2600; margin-left: 10px; flex-shrink: 0; }
+  #hamburger span { width: 100%; height: 2px; background: #fff; transition: 0.3s; }
+
+  /* --- MENÚ LATERAL (REDISEÑADO B&W) --- */
+  #side-menu { 
+    position: fixed; top: 0; right: -100%; width: 300px; height: 100%; 
+    background: #000; z-index: 2500; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+    padding: 120px 40px; display: flex; flex-direction: column; 
+    border-left: 1px solid #222; 
+  }
+  #side-menu.open { right: 0; }
+  
+  .menu-label { font-size: 0.65rem; letter-spacing: 4px; color: #555; margin-bottom: 30px; text-transform: uppercase; }
+  
+  .social-links-menu { display: flex; flex-direction: column; gap: 25px; }
+  
+  .social-item { 
+    display: flex; align-items: center; gap: 15px; 
+    text-decoration: none; color: #888; transition: 0.3s; 
+  }
+  .social-item i { font-size: 1.2rem; color: #fff; }
+  .social-item span { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; }
+  .social-item:hover { color: #fff; transform: translateX(5px); }
+
+  #menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2400; display: none; backdrop-filter: blur(3px); }
+
+  /* --- CARRUSEL --- */
+  #carousel { 
+    width: 100%; max-width: 1800px; margin: 100px auto 0; 
+    position: relative; overflow: hidden; background: #000; 
+    opacity: 0; transform: translateY(30px); transition: 1s; aspect-ratio: 16 / 9; 
+  }
+  .slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: 1s; cursor: pointer; }
+  .slide.active { opacity: 1; z-index: 5; }
+  .arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.4); color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.5rem; }
+  .arrow.left { left: 20px; } .arrow.right { right: 20px; }
+  .dots { position: absolute; bottom: 15px; width: 100%; text-align: center; z-index: 10; }
+  .dot { display: inline-block; width: 8px; height: 8px; margin: 0 4px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+  .dot.active { background: #fff; }
+
+  /* --- ESTRATEGIA (3 COLUMNAS) --- */
+  .about-section { width: 95%; max-width: 1400px; margin: 100px auto; text-align: center; }
+  .about-section h2 { font-size: 2.2rem; margin-bottom: 60px; letter-spacing: 5px; font-weight: 300; border-bottom: 1px solid #333; padding-bottom: 25px; }
+  .about-content { display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; text-align: left; }
+  .about-block h3 { color: #fff; font-size: 1.2rem; margin-bottom: 15px; text-transform: uppercase; border-left: 2px solid #fff; padding-left: 15px; }
+  .about-block p { font-size: 1rem; color: #aaa; }
+
+  /* --- METODOLOGÍA --- */
+  .process-section { width: 95%; max-width: 1200px; margin: 80px auto; text-align: center; }
+  .process-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+  .process-step { padding: 30px 20px; border: 1px solid #222; border-radius: 12px; }
+  .process-step h4 { font-size: 1.1rem; margin-bottom: 10px; color: #fff; text-transform: uppercase; }
+  .process-step p { font-size: 0.9rem; color: #777; }
+  .step-num { font-size: 2rem; font-weight: bold; color: #333; display: block; margin-bottom: 5px; }
+
+  /* --- PORTAFOLIO --- */
+  .projects-section { width: 95%; max-width: 1400px; margin: 100px auto; }
+  .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .project { cursor: pointer; text-align: center; }
+  .project img { width: 100%; height: 400px; object-fit: cover; transition: 0.6s; }
+  .project h3 { margin-top: 15px; font-weight: 300; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+
+  #whatsapp-float { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--accent-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; visibility: hidden; transition: 0.3s; }
+  #whatsapp-float.visible { opacity: 1; visibility: visible; }
+  .scroll-reveal { opacity: 0; transition: 1s; transform: translateY(20px); }
+
+  @media (max-width: 768px) {
+    :root { --logo-width: 85px; }
+    #menu-bar { height: 60px; padding-left: 85px; }
+    .nav-tab { font-size: 0.65rem; padding: 5px 10px; }
+    #carousel { margin-top: 80px; }
+    .about-section h2 { font-size: 1.1rem; letter-spacing: 2px; }
+    .about-content { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .about-block h3 { font-size: 0.6rem; padding-left: 5px; }
+    .about-block p { font-size: 0.45rem; line-height: 1.3; }
+    .process-grid { grid-template-columns: repeat(3, 1fr); gap: 5px; }
+    .process-step h4, .process-step p { font-size: 0.45rem; }
+    .step-num { font-size: 1rem; }
+    .projects-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .project img { height: 120px; }
+    .project h3 { font-size: 0.45rem; }
+  }
 </style>
 </head>
 <body>
 
-  <!-- Logo / Marca -->
-  <img src="VOID STUDIOB.png" id="intro-text" class="centered" alt="Void Studio 3D">
+  <img src="VOID STUDIOB.png" id="intro-text" alt="Void Studio 3D">
 
-  <!-- Barra de navegación -->
+  <a href="https://wa.me/59170000000" target="_blank" id="whatsapp-float">
+    <img src="https://img.icons8.com/color/48/ffffff/whatsapp--v1.png" alt="WA" width="35">
+  </a>
+
   <div id="menu-bar">
     <div id="nav-container">
-      <a class="nav-tab" href="interiores.html">Diseño de interiores</a>
-      <a class="nav-tab" href="stands.html">Diseño de stands</a>
-      <a class="nav-tab" href="comerciales.html">Espacios comerciales</a>
-      <a class="nav-tab" href="eventos.html">Eventos y activaciones</a>
-      <a class="nav-tab" href="mobiliario.html">Diseño mobiliario</a>
-      <a class="nav-tab" href="automotriz.html">Diseño automotriz</a>
+      <a class="nav-tab" href="interiores.html">Diseño de Interiores</a>
+      <a class="nav-tab" href="stands.html">Diseño de Stands</a>
+      <a class="nav-tab" href="comerciales.html">Espacios Comerciales</a>
+      <a class="nav-tab" href="eventos.html">Eventos y Activaciones</a>
+      <a class="nav-tab" href="mobiliario.html">Diseño de Mobiliario</a>
+      <a class="nav-tab" href="automotriz.html">Diseño Automotriz</a>
     </div>
-
-    <!-- Menú social -->
-    <div id="social-menu">
-      <button id="social-btn" aria-label="Abrir redes">
-        <span></span><span></span><span></span>
-      </button>
-      <div class="dropdown" role="menu">
-        <a href="https://instagram.com/voidstudio3d" target="_blank"><img src="https://img.icons8.com/ios-glyphs/30/ffffff/instagram-new.png"/> Instagram</a>
-        <a href="https://facebook.com" target="_blank"><img src="https://img.icons8.com/ios-glyphs/30/ffffff/facebook-new.png"/> Facebook</a>
-        <a href="https://linkedin.com" target="_blank"><img src="https://img.icons8.com/ios-glyphs/30/ffffff/linkedin.png"/> LinkedIn</a>
-        <a href="https://workana.com" target="_blank"><img src="https://img.icons8.com/ios-glyphs/30/ffffff/workana.png"/> Workana</a>
-      </div>
-    </div>
+    <div id="hamburger"><span></span><span></span><span></span></div>
   </div>
 
-  <div id="main-content">
-    <!-- Carrusel -->
-    <div id="carousel">
-      <div class="slide active" style="background-image:url('images/hero/hero-01.jpg');"></div>
-      <div class="slide" style="background-image:url('images/hero/hero-02.jpg');"></div>
-      <div class="slide" style="background-image:url('images/hero/hero-03.jpg');"></div>
-      <div class="slide" style="background-image:url('images/hero/hero-04.jpg');"></div>
-      <div class="slide" style="background-image:url('images/hero/hero-05.jpg');"></div>
-      <div class="slide" style="background-image:url('images/hero/hero-06.jpg');"></div>
-      <div class="slide" style="background-image:url('images/hero/hero-07.jpg');"></div>
-      <div class="slide" style="background-image:url('images/hero/hero-08.jpg');"></div>
+  <div id="menu-overlay"></div>
+  
+  <nav id="side-menu">
+    <div class="menu-label">Conecta con nosotros</div>
+    <div class="social-links-menu">
+        <a href="https://instagram.com/voidstudio3d" target="_blank" class="social-item">
+            <i class="fa-brands fa-instagram"></i>
+            <span>Instagram</span>
+        </a>
+        <a href="https://facebook.com/voidstudio3d" target="_blank" class="social-item">
+            <i class="fa-brands fa-facebook-f"></i>
+            <span>Facebook</span>
+        </a>
+        <a href="https://behance.net/voidstudio3d" target="_blank" class="social-item">
+            <i class="fa-brands fa-behance"></i>
+            <span>Behance</span>
+        </a>
+        <a href="mailto:info@voidstudio3d.com" class="social-item">
+            <i class="fa-regular fa-envelope"></i>
+            <span>Email</span>
+        </a>
+    </div>
+  </nav>
 
+  <div id="main-content" style="opacity:0; visibility:hidden;">
+    
+    <div id="carousel">
+      <div class="slide active" style="background-image:url('images/hero/hero-02.jpg');" data-url="interiores.html"></div>
+      <div class="slide" style="background-image:url('images/hero/hero-04.jpg');" data-url="stands.html"></div>
+      <div class="slide" style="background-image:url('images/hero/hero-03.jpg');" data-url="comerciales.html"></div>
+      <div class="slide" style="background-image:url('images/hero/hero-09.png');" data-url="eventos.html"></div>
+      <div class="slide" style="background-image:url('images/hero/hero-05.jpg');" data-url="mobiliario.html"></div>
+      <div class="slide" style="background-image:url('images/hero/hero-06.jpg');" data-url="automotriz.html"></div>
       <button class="arrow left">‹</button>
       <button class="arrow right">›</button>
-
-      <div class="dots">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-      </div>
+      <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
     </div>
 
-    <!-- Proyectos -->
-    <section class="section" id="proyectos">
-      <h2>Proyectos destacados</h2>
+    <section class="about-section scroll-reveal">
+      <h2>MÁS QUE VISUALIZACIÓN, ESTRATEGIA</h2>
+      <div class="about-content">
+        <div class="about-block">
+          <h3>Nuestra Filosofía</h3>
+          <p>En VOID STUDIO 3D, entendemos que un render no es solo una imagen, sino la representación de una ambición. Nos especializamos en cerrar la brecha entre el diseño conceptual y la percepción emocional, ofreciendo soluciones de visualización que actúan como herramientas de venta decisivas.</p>
+        </div>
+        <div class="about-block">
+          <h3>Vanguardia Tecnológica</h3>
+          <p>Operamos en la intersección del arte digital y la ingeniería visual. Implementamos flujos de trabajo avanzados con fotorrealismo y simulaciones lumínicas basadas en física real, garantizando una precisión técnica absoluta en cada proyecto entregado.</p>
+        </div>
+        <div class="about-block">
+          <h3>Compromiso y Alcance</h3>
+          <p>Desde Cochabamba, Bolivia, exportamos creatividad de alta gama. Creemos en la excelencia sin compromisos, asegurando que el resultado final no solo cumpla con las expectativas, sino que redefina el estándar estético de la industria internacional.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="process-section scroll-reveal">
+        <h2 style="font-weight: 300; letter-spacing: 3px; font-size: 1.2rem; margin-bottom: 20px; text-transform: uppercase;">Metodología de Trabajo</h2>
+        <div class="process-grid">
+            <div class="process-step"><span class="step-num">01</span><h4>Consultoría</h4><p>Análisis técnico y objetivos.</p></div>
+            <div class="process-step"><span class="step-num">02</span><h4>Desarrollo</h4><p>Construcción 3D y narrativa.</p></div>
+            <div class="process-step"><span class="step-num">03</span><h4>Refinamiento</h4><p>Render 4K y post-producción.</p></div>
+        </div>
+    </section>
+
+    <div class="budget-link-container scroll-reveal" style="text-align: center; margin: 80px 0;">
+        <a href="presupuestos.html" style="border: 1px solid #fff; padding: 15px 35px; color: #fff; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem;">Solicitar Presupuesto</a>
+    </div>
+
+    <section class="projects-section scroll-reveal">
+      <h2 style="text-align: center; margin-bottom: 40px; font-weight: 300; letter-spacing: 3px; font-size: 1.2rem; text-transform: uppercase;">Portafolio Destacado</h2>
       <div class="projects-grid">
-        <!-- Usa data-link en lugar de onclick para abrir visor y tener enlace al proyecto -->
-        <div class="project" data-link="Proyecto1.html" data-images="images/proyectos/proyecto-01-01.jpg,images/proyectos/proyecto-01-02.jpg">
-          <img src="images/proyectos/proyecto-01-01.jpg" alt="Proyecto 1" loading="lazy" />
-          <div class="project-info">
-            <h3>Proyecto 1</h3>
-            <p>Descripción breve del proyecto 1.</p>
-          </div>
-        </div>
-        <div class="project" data-link="proyecto2.html" data-images="images/proyectos/proyecto-02-01.jpg,images/proyectos/proyecto-02-02.jpg">
-          <img src="images/proyectos/proyecto-02-01.jpg" alt="Proyecto 2" loading="lazy" />
-          <div class="project-info">
-            <h3>Proyecto 2</h3>
-            <p>Descripción breve del proyecto 2.</p>
-          </div>
-        </div>
-        <div class="project" data-link="proyecto3.html" data-images="images/proyectos/proyecto-03-01.jpg,images/proyectos/proyecto-03-02.jpg">
-          <img src="images/proyectos/proyecto-03-01.jpg" alt="Proyecto 3" loading="lazy" />
-          <div class="project-info">
-            <h3>Proyecto 3</h3>
-            <p>Descripción breve del proyecto 3.</p>
-          </div>
-        </div>
-        <div class="project" data-link="proyecto4.html" data-images="images/proyectos/proyecto-04-01.jpg,images/proyectos/proyecto-04-02.jpg">
-          <img src="images/proyectos/proyecto-04-01.jpg" alt="Proyecto 4" loading="lazy" />
-          <div class="project-info">
-            <h3>Proyecto 4</h3>
-            <p>Descripción breve del proyecto 4.</p>
-          </div>
-        </div>
-        <div class="project" data-link="proyecto5.html" data-images="images/proyectos/proyecto-05-01.jpg,images/proyectos/proyecto-05-02.jpg">
-          <img src="images/proyectos/proyecto-05-01.jpg" alt="Proyecto 5" loading="lazy" />
-          <div class="project-info">
-            <h3>Proyecto 5</h3>
-            <p>Descripción breve del proyecto 5.</p>
-          </div>
-        </div>
-        <div class="project" data-link="proyecto6.html" data-images="images/proyectos/proyecto-06-01.jpg,images/proyectos/proyecto-06-02.jpg">
-          <img src="images/proyectos/proyecto-06-01.jpg" alt="Proyecto 6" loading="lazy" />
-          <div class="project-info">
-            <h3>Proyecto 6</h3>
-            <p>Descripción breve del proyecto 6.</p>
-          </div>
-        </div>
+        <div class="project" onclick="window.location.href='interiores.html'"><img src="images/proyectos/proyecto-01-01.jpg"><h3>Diseño de Interiores</h3></div>
+        <div class="project" onclick="window.location.href='stands.html'"><img src="images/proyectos/proyecto-02-01.jpg"><h3>Diseño de Stands</h3></div>
+        <div class="project" onclick="window.location.href='comerciales.html'"><img src="images/proyectos/proyecto-03-01.jpg"><h3>Diseño Comercial</h3></div>
+        <div class="project" onclick="window.location.href='eventos.html'"><img src="images/proyectos/proyecto-04-01.jpg"><h3>Diseño de Eventos</h3></div>
+        <div class="project" onclick="window.location.href='mobiliario.html'"><img src="images/proyectos/proyecto-05-01.jpg"><h3>Diseño de Mobiliario</h3></div>
+        <div class="project" onclick="window.location.href='automotriz.html'"><img src="images/proyectos/proyecto-06-01.jpg"><h3>Visualización Automotriz</h3></div>
       </div>
     </section>
 
-    <!-- Contacto -->
-    <section class="section" id="contacto">
-      <h2>Información de contacto</h2>
-      <p>Email: <a href="mailto:voidstudio3d@gmail.com">voidstudio3d@gmail.com</a></p>
-      <p>Teléfono: <a href="tel:+59170000000">+591 700 00000</a></p>
-      <p>Instagram: <a href="https://instagram.com/voidstudio3d" target="_blank">@voidstudio3d</a></p>
-      <p>Ubicación: Cochabamba, Bolivia</p>
-    </section>
-  </div>
-
-  <!-- Lightbox (visor en la misma página) -->
-  <div id="lightbox" aria-hidden="true">
-    <div class="lb-inner">
-      <a id="lb-link" href="#" target="_self">Ver página del proyecto</a>
-      <button id="lb-prev" class="lb-arrow" aria-label="Anterior">‹</button>
-      <img id="lb-img" src="" alt="Proyecto ampliado" />
-      <button id="lb-next" class="lb-arrow" aria-label="Siguiente">›</button>
-      <button id="lb-close" aria-label="Cerrar">✕</button>
-    </div>
+    <footer style="text-align: center; padding: 60px 20px; color: #444; font-size: 0.7rem; border-top: 1px solid #222;">
+        VOID STUDIO 3D &copy; 2026 | Cochabamba, Bolivia
+    </footer>
   </div>
 
 <script>
 window.addEventListener('load', () => {
-  const introText = document.getElementById('intro-text');
+  const intro = document.getElementById('intro-text');
+  const main = document.getElementById('main-content');
   const menu = document.getElementById('menu-bar');
-  const links = menu.querySelectorAll('.nav-tab');
-  const mainContent = document.getElementById('main-content');
   const carousel = document.getElementById('carousel');
-  const navContainer = document.getElementById('nav-container');
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  const hamburger = document.getElementById('hamburger');
+  const sideMenu = document.getElementById('side-menu');
+  const overlay = document.getElementById('menu-overlay');
+  
+  let index = 0;
 
-  introText.addEventListener('click', () => {
+  intro.addEventListener('click', () => {
+    intro.classList.add('sticky');
     document.body.style.overflowY = 'auto';
-    introText.classList.remove('centered');
-    introText.classList.add('sticky');
-
+    document.documentElement.style.overflowY = 'auto';
     setTimeout(() => {
-      menu.style.opacity = '1';
-      menu.style.visibility = 'visible';
-      mainContent.style.opacity = '1';
-      mainContent.style.visibility = 'visible';
-      carousel.style.opacity = '1';
-      carousel.style.transform = 'translateY(0)';
-      links.forEach((link, i) => setTimeout(() => (link.style.opacity = '1'), i * 120));
+      menu.style.opacity = '1'; menu.style.visibility = 'visible';
+      main.style.opacity = '1'; main.style.visibility = 'visible';
+      carousel.style.opacity = '1'; carousel.style.transform = 'translateY(0)';
+      document.getElementById('whatsapp-float').classList.add('visible');
+      document.querySelectorAll('.nav-tab').forEach((t, i) => setTimeout(() => t.style.opacity = '1', i * 60));
     }, 400);
   });
 
-  // Arrastre horizontal del menú
-  let isDown = false; let startX = 0; let scrollLeft = 0;
-  navContainer.addEventListener('mousedown', (e) => {
-    isDown = true; navContainer.classList.add('dragging');
-    startX = e.pageX - navContainer.offsetLeft; scrollLeft = navContainer.scrollLeft;
-  });
-  navContainer.addEventListener('mouseleave', () => { isDown = false; navContainer.classList.remove('dragging'); });
-  navContainer.addEventListener('mouseup', () => { isDown = false; navContainer.classList.remove('dragging'); });
-  navContainer.addEventListener('mousemove', (e) => {
-    if (!isDown) return; e.preventDefault();
-    const x = e.pageX - navContainer.offsetLeft; const walk = (x - startX) * 2;
-    navContainer.scrollLeft = scrollLeft - walk;
-  });
+  const toggleMenu = () => {
+    sideMenu.classList.toggle('open');
+    overlay.style.display = sideMenu.classList.contains('open') ? 'block' : 'none';
+  };
+  hamburger.addEventListener('click', toggleMenu);
+  overlay.addEventListener('click', toggleMenu);
 
-  // Carrusel
-  const slides = document.querySelectorAll('.slide');
-  const dots = document.querySelectorAll('.dot');
-  const prev = document.querySelector('.arrow.left');
-  const next = document.querySelector('.arrow.right');
-  let index = 0;
-  function showSlide(i){
-    slides.forEach(s => s.classList.remove('active'));
-    dots.forEach(d => d.classList.remove('active'));
-    slides[i].classList.add('active'); dots[i].classList.add('active');
+  function showSlide(n) {
+    slides[index].classList.remove('active'); dots[index].classList.remove('active');
+    index = (n + slides.length) % slides.length;
+    slides[index].classList.add('active'); dots[index].classList.add('active');
   }
-  next.addEventListener('click',()=>{ index=(index+1)%slides.length; showSlide(index); });
-  prev.addEventListener('click',()=>{ index=(index-1+slides.length)%slides.length; showSlide(index); });
-  dots.forEach((dot,i)=> dot.addEventListener('click',()=>{ index=i; showSlide(index); }));
-  setInterval(()=>{ index=(index+1)%slides.length; showSlide(index); }, 4000);
 
-  // Aparición por scroll
-  const sections = document.querySelectorAll('.section');
+  slides.forEach(slide => {
+    slide.addEventListener('click', () => {
+        const url = slide.getAttribute('data-url');
+        if(url) window.location.href = url;
+    });
+  });
+
+  document.querySelector('.arrow.right').onclick = (e) => { e.stopPropagation(); showSlide(index + 1); };
+  document.querySelector('.arrow.left').onclick = (e) => { e.stopPropagation(); showSlide(index - 1); };
+  
+  setInterval(() => { if(main.style.opacity === '1') showSlide(index + 1); }, 5000);
+
   const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
-  }, { threshold:0.2 });
-  sections.forEach(sec => observer.observe(sec));
-
-  // Previsualización proyectos (hover)
-  const projects = document.querySelectorAll('.project');
-  projects.forEach(p => {
-    const imgs = p.dataset.images.split(',').map(s=>s.trim()).filter(Boolean);
-    let imgIndex = 0; let interval;
-    p.addEventListener('mouseenter', () => {
-      const imgEl = p.querySelector('img');
-      if(imgs.length < 2) return;
-      interval = setInterval(() => { imgIndex = (imgIndex+1)%imgs.length; imgEl.src = imgs[imgIndex]; }, 1500);
-    });
-    p.addEventListener('mouseleave', () => {
-      const imgEl = p.querySelector('img');
-      clearInterval(interval); imgEl.src = imgs[0]; imgIndex = 0;
-    });
-  });
-
-  // Social menu
-  const socialBtn = document.getElementById('social-btn');
-  const dropdown = document.querySelector('#social-menu .dropdown');
-  socialBtn.addEventListener('click', () => { dropdown.style.display = dropdown.style.display==='flex'?'none':'flex'; });
-  document.addEventListener('click', e => { if(!socialBtn.contains(e.target) && !dropdown.contains(e.target)) dropdown.style.display='none'; });
-
-  // Fondo cambia al scroll
-  window.addEventListener('scroll', () => {
-    const scroll = window.scrollY; const color = Math.min(scroll/800,1)*255; document.body.style.backgroundColor = `rgb(${color},${color},${color})`;
-  });
-
-  /* ====== Lightbox (en esta misma página) ====== */
-  const lb = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lb-img');
-  const lbPrev = document.getElementById('lb-prev');
-  const lbNext = document.getElementById('lb-next');
-  const lbClose = document.getElementById('lb-close');
-  const lbLink = document.getElementById('lb-link');
-
-  let currentImages = [];
-  let photoIndex = 0;
-
-  function openLB(imagesArray, projectHref, start = 0){
-    currentImages = imagesArray;
-    photoIndex = start;
-    lbImg.src = currentImages[photoIndex];
-    lbLink.href = projectHref || '#';
-    lb.classList.add('open');
-    lb.setAttribute('aria-hidden','false');
-    document.body.style.overflow = 'hidden'; // bloquea scroll de fondo
-  }
-  function closeLB(){
-    lb.classList.remove('open');
-    lb.setAttribute('aria-hidden','true');
-    lbImg.src = '';
-    document.body.style.overflow = ''; // restaura scroll
-  }
-  function navLB(dir){
-    if(!currentImages.length) return;
-    photoIndex = (photoIndex + dir + currentImages.length) % currentImages.length;
-    lbImg.src = currentImages[photoIndex];
-  }
-
-  // Click en tarjetas: abrir visor (y NO navegar)
-  document.querySelector('.projects-grid').addEventListener('click', (e)=>{
-    const card = e.target.closest('.project');
-    if(!card) return;
-    const imgs = (card.dataset.images||'').split(',').map(s=>s.trim()).filter(Boolean);
-    const href = card.dataset.link || '#';
-    if(imgs.length){ openLB(imgs, href, 0); }
-  });
-
-  // Controles visor
-  lbPrev.addEventListener('click', ()=> navLB(-1));
-  lbNext.addEventListener('click', ()=> navLB(1));
-  lbClose.addEventListener('click', closeLB);
-  lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLB(); });
-  window.addEventListener('keydown', (e)=>{
-    if(!lb.classList.contains('open')) return;
-    if(e.key === 'Escape') closeLB();
-    if(e.key === 'ArrowLeft') navLB(-1);
-    if(e.key === 'ArrowRight') navLB(1);
-  });
+    entries.forEach(en => { if(en.isIntersecting) { en.target.style.opacity = '1'; en.target.style.transform = 'translateY(0)'; } });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.scroll-reveal').forEach(s => observer.observe(s));
 });
 </script>
 </body>
